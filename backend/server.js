@@ -86,19 +86,22 @@ app.get("/entry", async (req, res) => {
 app.get("/showpage/:id", isLoggedIn, async (req, res) => {
   const showPageData = await User.findById(req.params.id).populate("Contacts");
   console.log(showPageData.Contacts);
-
   res.json({ info: showPageData });
 });
 
 app.post("/register-user", async (req, res, next) => {
-  console.log("registering user");
   const registerUser = await User.register(
-    new User({ username: req.body.username, password: req.body.password }),
+    new User({
+      username: req.body.username,
+      password: req.body.password,
+      Email: req.body.Email,
+    }),
     req.body.password
   );
-  console.log(registerUser);
+  console.log(`this is registered user${registerUser}`);
   console.log("registered user");
-  res.json({ registeredID: registerUser._id });
+  console.log(`this is registerdUser id ${registerUser.id}`);
+  res.json({ registeredID: registerUser.id });
 });
 
 app.post("/login", async (req, res, next) => {
@@ -111,8 +114,11 @@ app.post("/login", async (req, res, next) => {
       req.session.isLoggedIn = true;
       console.log("you have logged in");
       console.log(req.session.isLoggedIn);
-      console.log(result.id);
-      res.json({ session: req.session.isLoggedIn, id: result.id });
+      res.json({
+        session: req.session.isLoggedIn,
+        id: result.id,
+        username: result.username,
+      });
     }
   });
 });
@@ -136,21 +142,48 @@ app.post("/create-group/:id", async (req, res) => {
   // create a new group using the name from the form data
   //using information from req.params.id assign the owner ID
   const createNewGroup = await SaleGroup.create({
-    name: req.body.groupName,
+    name: req.body.groupname,
     ownerID: req.params.id,
   });
   createNewGroup.save();
   console.log(createNewGroup);
+  console.log(req.body);
   res.send("Group created");
 });
 
 app.get("/group-page/:id", async (req, res) => {
-  const getGroupInfo = await SaleGroup.find({ ownerID: req.params.id });
+  const getGroupInfo = await SaleGroup.find({
+    ownerID: req.params.id,
+  }).populate("Users");
   res.json({ GroupInfo: getGroupInfo });
   console.log(getGroupInfo);
   console.log("Group information found");
 });
 
+app.post("/add-to-group", async (req, res) => {
+  const findGroupId = await SaleGroup.findOne({ _id: req.body.GroupName });
+  const findUserId = await User.findOne({ Email: req.body.Email });
+  //add group to user list (not completed)
+  findGroupId.Users.push(findUserId._id);
+  await findGroupId.save();
+  //need to add logic so that no duplicate ids are added.
+  res.send("you have reached group adding feature");
+  console.log("added to group");
+  console.log(findUserId);
+  console.log(findGroupId);
+});
+
+app.delete("/remove-from-group/:ownerID/:groupID/:userID", async (req, res) => {
+  const findGroupId = await SaleGroup.updateOne(
+    { _id: req.params.groupID },
+    { $pull: { Users: req.params.userID } }
+  );
+  const findNewGroup = await SaleGroup.find({
+    ownerID: req.params.ownerID,
+  }).populate("Users");
+  findGroupId.Users;
+  res.json({ newGroupInfo: findNewGroup });
+});
 app.delete("/delete-client/:id", async (req, res) => {
   const deletedClient = await Contact.deleteOne({ _id: req.params.id });
   console.log(deletedClient);
