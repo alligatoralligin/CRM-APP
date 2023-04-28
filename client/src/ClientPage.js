@@ -11,18 +11,20 @@ function ClientPage(props) {
 
   const onSubmit = async (data) => {
     reset();
-    await axios
+    const newClientResp = await axios
       .post(`http://localhost:8000/create-new-client/${props.UserID}`, data, {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       })
       .then(setSubmitted((previousState) => !previousState));
 
-    console.log(data);
+    setDataArray(newClientResp.data.newContactList.Contacts);
   };
 
   const deleteReq = async (deleteID) => {
-    setSubmitted(!submitted);
-    await axios.delete(`http://localhost:8000/delete-client/${deleteID}`);
+    const deleteResponse = await axios.delete(
+      `http://localhost:8000/delete-client/${props.UserID}/${deleteID}`
+    );
+    setDataArray(deleteResponse.data.updatedClientList.Contacts);
   };
 
   watch(["name", "title", "Email", "phoneNumber", "Source"]);
@@ -42,7 +44,7 @@ function ClientPage(props) {
       }
     }
     getMessage();
-  }, [props.UserID, submitted]);
+  }, [props.UserID]);
 
   //
 

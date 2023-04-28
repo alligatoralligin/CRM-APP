@@ -51,7 +51,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 //Checking if user is logged in
-function isLoggedIn(req, res, next) {
+async function isLoggedIn(req, res, next) {
   if (req.session.isLoggedIn) {
     console.log("Hello you are logged in ");
   } else {
@@ -85,7 +85,7 @@ app.get("/entry", async (req, res) => {
 
 app.get("/showpage/:id", isLoggedIn, async (req, res) => {
   const showPageData = await User.findById(req.params.id).populate("Contacts");
-  console.log(showPageData.Contacts);
+
   res.json({ info: showPageData });
 });
 
@@ -133,9 +133,13 @@ app.post("/create-new-client/:id", async (req, res) => {
   const foundUser = await User.findById(req.params.id);
   foundUser.Contacts.push(createNewClient._id);
   await foundUser.save();
+  const updatedContactList = await User.findById(req.params.id).populate(
+    "Contacts"
+  );
   console.log(req.query);
   console.log(createNewClient);
   console.log("contact created");
+  res.json({ newContactList: updatedContactList });
 });
 
 app.post("/create-group/:id", async (req, res) => {
@@ -184,9 +188,15 @@ app.delete("/remove-from-group/:ownerID/:groupID/:userID", async (req, res) => {
   findGroupId.Users;
   res.json({ newGroupInfo: findNewGroup });
 });
-app.delete("/delete-client/:id", async (req, res) => {
-  const deletedClient = await Contact.deleteOne({ _id: req.params.id });
+app.delete("/delete-client/:UserId/:clientid", async (req, res) => {
+  const deletedClient = await Contact.deleteOne({ _id: req.params.clientid });
+  const updatedShowPageData = await User.findById(req.params.UserId).populate(
+    "Contacts"
+  );
+  //updated show page data to refresh the client page when a client is deleted
+  console.log(updatedShowPageData);
   console.log(deletedClient);
+  res.json({ updatedClientList: updatedShowPageData });
 });
 app.post("/update-client/:id", async (req, res) => {
   const updateClient = await Contact.updateOne(
