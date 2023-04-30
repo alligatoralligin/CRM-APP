@@ -7,7 +7,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 //User Schema to create a User that stores the references of Contact information
 const userSchema = new Schema({
   Email: String,
-  Groups: [{ type: Schema.Types.ObjectId, ref: "SaleGroup" }],
+  GroupID: String,
   Contacts: [{ type: Schema.Types.ObjectId, ref: "Contact" }],
 });
 

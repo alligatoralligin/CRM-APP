@@ -20,7 +20,7 @@ export default function RegisterPage(props) {
     props.setIsLoggedIn();
     navigate(`/Clientlist/${registerResponse.data.registeredID}`);
   };
-  watch(["username", "password", "salegroup", "Email"]);
+  watch(["username", "password", "Email", "salegroup"]);
 
   return (
     <div>
@@ -47,12 +47,12 @@ export default function RegisterPage(props) {
           {...register("Email", { required: true })}
         ></input>
         <br></br>
-        <label for="salegroup">Enter SaleGroup here if known </label>
+        <label for="salegroup">Enter SaleGroup Here </label>
         <br></br>
         <input
           type="text"
           id="salegroup"
-          {...register("salegroup", { required: false })}
+          {...register("salegroup", { required: true })}
         ></input>
         <br></br>
         <button>Register</button>

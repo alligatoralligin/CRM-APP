@@ -90,17 +90,20 @@ app.get("/showpage/:id", isLoggedIn, async (req, res) => {
 });
 
 app.post("/register-user", async (req, res, next) => {
+  // finding groupId based on groupname
+  const groupFind = await SaleGroup.findOne({ name: req.body.salegroup });
   const registerUser = await User.register(
     new User({
       username: req.body.username,
       password: req.body.password,
       Email: req.body.Email,
+      GroupID: groupFind._id,
     }),
     req.body.password
   );
-  console.log(`this is registered user${registerUser}`);
-  console.log("registered user");
-  console.log(`this is registerdUser id ${registerUser.id}`);
+  groupFind.Users.push(registerUser.id);
+  groupFind.save();
+  console.log(req.body.salegroup);
   res.json({ registeredID: registerUser.id });
 });
 
@@ -129,7 +132,19 @@ app.get("/get-client-by-id/:id", async (req, res) => {
   console.log(findClientbyId);
 });
 app.post("/create-new-client/:id", async (req, res) => {
-  const createNewClient = await Contact.create(req.body);
+  const createNewClient = await Contact.create({
+    name: req.body.name,
+    title: req.body.title,
+    Email: req.body.email,
+    phoneNumber: req.body.phoneNumber,
+    Source: req.body.Source,
+    User: req.params.id,
+  });
+  // const addIds = await Contact.updateOne(
+  //   { id: createNewClient._id },
+  //   { AssignedSales: req.params.id }
+  // );
+  // await createNewClient.save();
   const foundUser = await User.findById(req.params.id);
   foundUser.Contacts.push(createNewClient._id);
   await foundUser.save();
@@ -137,6 +152,7 @@ app.post("/create-new-client/:id", async (req, res) => {
     "Contacts"
   );
   console.log(req.query);
+  console.log(req.body);
   console.log(createNewClient);
   console.log("contact created");
   res.json({ newContactList: updatedContactList });
@@ -167,13 +183,17 @@ app.get("/group-page/:id", async (req, res) => {
 app.post("/add-to-group", async (req, res) => {
   const findGroupId = await SaleGroup.findOne({ _id: req.body.GroupName });
   const findUserId = await User.findOne({ Email: req.body.Email });
+  const addGroupIdToUser = await User.findOneAndUpdate(
+    { Email: req.body.Email },
+    { GroupID: findGroupId.id }
+  );
   //add group to user list (not completed)
   findGroupId.Users.push(findUserId._id);
   await findGroupId.save();
   //need to add logic so that no duplicate ids are added.
   res.send("you have reached group adding feature");
   console.log("added to group");
-  console.log(findUserId);
+  console.log(addGroupIdToUser);
   console.log(findGroupId);
 });
 
@@ -213,6 +233,25 @@ app.post("/update-client/:id", async (req, res) => {
 
 app.post("/update-client-info:id", async (req, res) => {
   console.log(req.params.id);
+});
+
+app.get("/dashboard/:UserID", async (req, res) => {
+  const groupById = await SaleGroup.findOne({
+    ownerID: req.params.UserID,
+  }).populate("Users");
+  const aggregateResp = await User.aggregate([
+    { $match: { GroupID: groupById.id } },
+    {
+      $project: {
+        Contacts: 1,
+      },
+    },
+  ]);
+
+  const populatedContacts = await User.populate(aggregateResp, {
+    path: "Contacts",
+  });
+  console.log(populatedContacts);
 });
 
 app.listen(port, () => {

@@ -63,12 +63,13 @@ function GroupPage(props) {
   if (GroupData) {
     for (const group in GroupData) {
       let userList = GroupData[group].Users;
-      groupMemberRender.push(<h3>{group}</h3>);
+      groupMemberRender.push(<h3>{GroupData[group].name}</h3>);
       for (let i = 0; i < userList.length; i++) {
         groupMemberRender.push(
           <div>
             <p>Username:{userList[i].username} </p>
             <p>Email:{userList[i].Email}</p>
+            <p>Group:{userList[i].Group}</p>
 
             <button
               onClick={() =>
@@ -85,7 +86,9 @@ function GroupPage(props) {
 
   if (GroupData) {
     for (const group in GroupData) {
-      selectOptions.push(<option value={GroupData[group]._id}>{group}</option>);
+      selectOptions.push(
+        <option value={GroupData[group]._id}>{GroupData[group].name}</option>
+      );
     }
   }
 
