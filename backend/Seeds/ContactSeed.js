@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Contact = require("../Schemas/Contact");
 const User = require("../Schemas/User");
+const SaleGroup = require("../Schemas/SalesGroup");
 
 async function main() {
   await mongoose.connect("mongodb://127.0.0.1:27017/CRMAPP");
@@ -13,6 +14,8 @@ main().catch((err) => console.log(err));
 
 async function newContact() {
   await Contact.deleteMany({});
+  await User.deleteMany({});
+  await SaleGroup.deleteMany({});
   createdContact = await Contact.create({
     name: "Jord Dane",
     title: "Retail",
@@ -53,9 +56,9 @@ async function newContact4() {
     Source: "unknown",
   });
   //find User and push contact id to User as a reference that will be populated when needed
-  updateUser = await User.findById("642746ecff410c2624a3ac32");
-  updateUser.Contacts.push(createdContact._id);
-  await updateUser.save();
+  // updateUser = await User.findById("642746ecff410c2624a3ac32");
+  // updateUser.Contacts.push(createdContact._id);
+  // await updateUser.save();
 }
 
 newContact();

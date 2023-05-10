@@ -12,15 +12,18 @@ import ProtectedRoute from "./ProtectedRoute";
 import Dashboard from "./Dashboard";
 import GroupCreatePage from "./GroupCreatePage";
 import GroupPage from "./GroupPage";
+import ProductPage from "./ProductPage";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [UserID, setUserID] = useState(null);
+  const [groupIDArray, setGroupIDArray] = useState(null);
   const handleLogin = () => setIsLoggedIn(true);
   const handleLogout = () => {
     localStorage.clear();
     setIsLoggedIn(false);
     setUserID(null);
+    setGroupIDArray(null);
   };
 
   let sessionCookie = document.cookie;
@@ -41,6 +44,15 @@ function App() {
     }
   }, [isLoggedIn]);
 
+  useEffect(() => {
+    const GroupIDs = localStorage.getItem("GroupIDs");
+    if (GroupIDs) {
+      const convertToArray = JSON.parse(GroupIDs);
+      setGroupIDArray(convertToArray);
+      console.log(GroupIDs);
+    }
+  }, [isLoggedIn]);
+
   console.log(sessionCookie);
   return (
     <div>
@@ -55,14 +67,20 @@ function App() {
           path="/ClientList/:id"
           element={
             <ProtectedRoute isLoggedIn={isLoggedIn}>
-              <ClientPage isLoggedIn={isLoggedIn} UserID={UserID}></ClientPage>
+              <ClientPage
+                isLoggedIn={isLoggedIn}
+                UserID={UserID}
+                groupIDArray={groupIDArray}
+              ></ClientPage>
             </ProtectedRoute>
           }
         ></Route>
         <Route
           path="/Client/Edit/:id"
           element={
-            <ClientEdit UserID={UserID} isLoggedIn={isLoggedIn}></ClientEdit>
+            <ClientEdit UserID={UserID} isLoggedIn={isLoggedIn}>
+              {" "}
+            </ClientEdit>
           }
         ></Route>
         <Route
@@ -105,6 +123,14 @@ function App() {
           element={
             <ProtectedRoute isLoggedIn={isLoggedIn}>
               <GroupPage UserID={UserID}></GroupPage>
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/Product-Page/:id"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <ProductPage UserID={UserID}></ProductPage>
             </ProtectedRoute>
           }
         ></Route>

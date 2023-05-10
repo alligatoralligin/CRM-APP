@@ -33,6 +33,7 @@ function ClientEdit(props) {
       defaultValues.Email = `${clientData.Email}`;
       defaultValues.phoneNumber = `${clientData.phoneNumber}`;
       defaultValues.Source = `${clientData.Source}`;
+      defaultValues.Notes = `${clientData.Notes}`;
 
       reset({ ...defaultValues });
     }
@@ -47,7 +48,9 @@ function ClientEdit(props) {
     console.log(data);
   };
 
-  console.log(watch(["name", "title", "Email", "phoneNumber", "Source"]));
+  console.log(
+    watch(["name", "title", "Email", "phoneNumber", "Source", "notes"])
+  );
   return (
     <div>
       <h1>Hello from ClientEdit</h1>
@@ -78,6 +81,16 @@ function ClientEdit(props) {
         <br></br>
         <label htmlFor="Source">Source </label>
         <input type="text" id="Source" {...register("Source")}></input>
+        <br></br>
+        <label htmlFor="Notes">Notes </label>
+        <br></br>
+        <textarea
+          type="text"
+          id="Notes"
+          rows={4}
+          cols={50}
+          {...register("Notes")}
+        ></textarea>
         <br></br>
         <button>Update</button>
       </form>

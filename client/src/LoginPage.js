@@ -17,11 +17,17 @@ export default function LoginPage(props) {
       }
     );
     console.log(`Logged in state : ${loginResponse.data.session}`);
+    console.log(loginResponse.data);
     if (loginResponse.data.session === true) {
       props.setIsLoggedIn();
       window.localStorage.setItem("IS_LOGGED_IN", loginResponse.data.session);
       window.localStorage.setItem("UserID", loginResponse.data.id);
       window.localStorage.setItem("Username", loginResponse.data.username);
+      window.localStorage.setItem(
+        "GroupIDs",
+        JSON.stringify(loginResponse.data.GroupIDs)
+      );
+
       navigate(`/Clientlist/${loginResponse.data.id}`);
     }
     console.log(data);

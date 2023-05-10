@@ -9,6 +9,7 @@ const port = 8000;
 //Mongoose Declarations
 const Contact = require("./Schemas/Contact");
 const SaleGroup = require("./Schemas/SalesGroup");
+const Product = require("./Schemas/Product");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
@@ -85,30 +86,45 @@ app.get("/entry", async (req, res) => {
 
 app.get("/showpage/:id", isLoggedIn, async (req, res) => {
   const showPageData = await User.findById(req.params.id).populate("Contacts");
-
-  res.json({ info: showPageData });
+  const groupInfo = await User.findById(req.params.id).populate("GroupID");
+  console.log(groupInfo);
+  res.json({ info: showPageData, groupInfo: groupInfo.GroupID });
 });
 
 app.post("/register-user", async (req, res, next) => {
   // finding groupId based on groupname
-  const groupFind = await SaleGroup.findOne({ name: req.body.salegroup });
-  const registerUser = await User.register(
-    new User({
-      username: req.body.username,
-      password: req.body.password,
-      Email: req.body.Email,
-      GroupID: groupFind._id,
-    }),
-    req.body.password
-  );
-  groupFind.Users.push(registerUser.id);
-  groupFind.save();
-  console.log(req.body.salegroup);
-  res.json({ registeredID: registerUser.id });
+  if (req.body.salegroup) {
+    const groupFind = await SaleGroup.findOne({ name: req.body.salegroup });
+    const registerUser = await User.register(
+      new User({
+        username: req.body.username,
+        password: req.body.password,
+        Email: req.body.Email,
+        GroupID: groupFind._id,
+      }),
+      req.body.password
+    );
+    groupFind.Users.push(registerUser.id);
+    groupFind.save();
+    console.log(req.body.salegroup);
+    res.json({ registeredID: registerUser.id });
+  }
+  if (!req.body.salegroup) {
+    const registerUser = await User.register(
+      new User({
+        username: req.body.username,
+        password: req.body.password,
+        Email: req.body.Email,
+      }),
+      req.body.password
+    );
+    res.json({ registeredID: registerUser.id });
+  }
 });
 
 app.post("/login", async (req, res, next) => {
   const authenticate = User.authenticate();
+
   authenticate(req.body.Username, req.body.Password, function (err, result) {
     if (result == false) {
       console.log("incorrect username or password");
@@ -117,11 +133,23 @@ app.post("/login", async (req, res, next) => {
       req.session.isLoggedIn = true;
       console.log("you have logged in");
       console.log(req.session.isLoggedIn);
-      res.json({
-        session: req.session.isLoggedIn,
-        id: result.id,
-        username: result.username,
-      });
+      console.log(result);
+
+      if (result.GroupID) {
+        res.json({
+          session: req.session.isLoggedIn,
+          id: result.id,
+          username: result.username,
+          GroupIDs: result.GroupID,
+        });
+      }
+      if (!result.GroupID) {
+        res.json({
+          session: req.session.isLoggedIn,
+          id: result.id,
+          username: result.username,
+        });
+      }
     }
   });
 });
@@ -135,9 +163,10 @@ app.post("/create-new-client/:id", async (req, res) => {
   const createNewClient = await Contact.create({
     name: req.body.name,
     title: req.body.title,
-    Email: req.body.email,
+    Email: req.body.Email,
     phoneNumber: req.body.phoneNumber,
     Source: req.body.Source,
+    Notes: req.body.Notes,
     User: req.params.id,
   });
   // const addIds = await Contact.updateOne(
@@ -146,7 +175,9 @@ app.post("/create-new-client/:id", async (req, res) => {
   // );
   // await createNewClient.save();
   const foundUser = await User.findById(req.params.id);
-  foundUser.Contacts.push(createNewClient._id);
+  foundUser.Contacts.push(createNewClient);
+  foundUser.ContactsID.push(createNewClient._id);
+  //Instead of storing ID, I will store the entire contact information so that I don't have to populate after
   await foundUser.save();
   const updatedContactList = await User.findById(req.params.id).populate(
     "Contacts"
@@ -158,14 +189,40 @@ app.post("/create-new-client/:id", async (req, res) => {
   res.json({ newContactList: updatedContactList });
 });
 
+app.get("/product-page/:id", async (req, res) => {
+  const findGroups = await SaleGroup.find({ ownerID: req.params.id });
+  console.log(findGroups);
+  res.json({ SaleGroupList: findGroups });
+});
+app.post("/create-new-product/:id", async (req, res) => {
+  const findGroup = await SaleGroup.findOne({ _id: req.body.GroupName });
+  const newProduct = await Product.create({
+    name: req.body.name,
+    price: req.body.price,
+    descriptions: req.body.description,
+    Img: req.body.Img,
+    SalesID: req.params.id,
+    GroupID: req.body.GroupName,
+  });
+  findGroup.Products.push(newProduct._id);
+  findGroup.save();
+  console.log(newProduct);
+  console.log(findGroup);
+});
+
 app.post("/create-group/:id", async (req, res) => {
   // create a new group using the name from the form data
-  //using information from req.params.id assign the owner ID
+  //using information from req.params.id assign the owner ID for the group
   const createNewGroup = await SaleGroup.create({
     name: req.body.groupname,
     ownerID: req.params.id,
   });
   createNewGroup.save();
+  //need to add group to array of groupid in case there is more than one ID
+  const addGroupIDtoUser = await User.findOne({ id: req.body.id });
+  addGroupIDtoUser.GroupID.push(createNewGroup._id);
+  addGroupIDtoUser.save();
+  console.log(addGroupIDtoUser);
   console.log(createNewGroup);
   console.log(req.body);
   res.send("Group created");
@@ -236,22 +293,31 @@ app.post("/update-client-info:id", async (req, res) => {
 });
 
 app.get("/dashboard/:UserID", async (req, res) => {
-  const groupById = await SaleGroup.findOne({
+  //Counting all the documents in Contacts of group
+  const groupById = await SaleGroup.find({
     ownerID: req.params.UserID,
   }).populate("Users");
+  //Total Client Number
   const aggregateResp = await User.aggregate([
-    { $match: { GroupID: groupById.id } },
-    {
-      $project: {
-        Contacts: 1,
-      },
-    },
+    { $match: { GroupID: groupById[1]._id } },
+    { $group: { _id: "$Contacts" } },
+    { $count: "Contacts" },
   ]);
+  //Clients per User
+  const userByGroupID = await User.find({ GroupID: groupById[1]._id }).select({
+    username: 1,
+    Contacts: 1,
+  });
 
+  console.log(userByGroupID);
   const populatedContacts = await User.populate(aggregateResp, {
     path: "Contacts",
   });
-  console.log(populatedContacts);
+  // console.log(groupById);
+  // console.log(populatedContacts);
+  console.log(aggregateResp);
+  console.log(groupById);
+  res.json({ groupContacts: aggregateResp, userByGroupID: userByGroupID });
 });
 
 app.listen(port, () => {

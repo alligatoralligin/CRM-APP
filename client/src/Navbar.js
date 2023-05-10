@@ -23,6 +23,7 @@ export default function Navbar(props) {
           <NavLink to={`/Dashboard/${props.UserID}`}> -Dashboard</NavLink>
           <NavLink to={`/Create-Group/${props.UserID}`}> -Create Group</NavLink>
           <NavLink to={`/Group-Page/${props.UserID}`}> -Group Page</NavLink>
+          <NavLink to={`/Product-Page/${props.UserID}`}>-Product Page</NavLink>
         </span>
       )}
 

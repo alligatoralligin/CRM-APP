@@ -10,6 +10,8 @@ const contactSchema = new mongoose.Schema({
   Source: String,
   Img: String,
   User: { type: Schema.Types.ObjectId, ref: "User" },
+  AssignedGroup: String,
+  Notes: String,
 });
 
 const Contact = mongoose.model("Contact", contactSchema);

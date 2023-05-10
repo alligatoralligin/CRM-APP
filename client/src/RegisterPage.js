@@ -52,7 +52,7 @@ export default function RegisterPage(props) {
         <input
           type="text"
           id="salegroup"
-          {...register("salegroup", { required: true })}
+          {...register("salegroup", { required: false })}
         ></input>
         <br></br>
         <button>Register</button>

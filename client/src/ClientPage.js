@@ -8,6 +8,7 @@ function ClientPage(props) {
   const [submitted, setSubmitted] = useState(false);
   const { register, handleSubmit, watch, reset } = useForm();
   const [dataArray, setDataArray] = useState([]);
+  const [groupInfo, setGroupInfo] = useState("");
 
   const onSubmit = async (data) => {
     reset();
@@ -27,8 +28,17 @@ function ClientPage(props) {
     setDataArray(deleteResponse.data.updatedClientList.Contacts);
   };
 
-  watch(["name", "title", "Email", "phoneNumber", "Source"]);
+  watch([
+    "name",
+    "title",
+    "Email",
+    "phoneNumber",
+    "Source",
+    "Notes",
+    "GroupName",
+  ]);
 
+  //useEffect to fetch the contacts that are associated with the UserID that is currently logged in
   useEffect(() => {
     async function getMessage() {
       if (props.UserID) {
@@ -36,8 +46,9 @@ function ClientPage(props) {
           const response = await axios.get(
             `http://localhost:8000/showpage/${props.UserID}`
           );
-          console.log(response.data.info.Contacts);
+          console.log(response.data.groupInfo);
           setDataArray(response.data.info.Contacts);
+          setGroupInfo(response.data.groupInfo);
         } catch (error) {
           console.error(error);
         }
@@ -46,9 +57,9 @@ function ClientPage(props) {
     getMessage();
   }, [props.UserID]);
 
-  //
-
   let ShowPageContent = [];
+
+  let selectOptions = [];
 
   for (let i = 0; i < dataArray.length; i++) {
     ShowPageContent.push(
@@ -58,15 +69,24 @@ function ClientPage(props) {
         <p>Email:{dataArray[i].Email}</p>
         <p>Phone number:{dataArray[i].phoneNumber}</p>
         <p>Source:{dataArray[i].Source}</p>
+        <p>Notes:{dataArray[i].Notes}</p>
         <Link to={`/Client/Edit/${dataArray[i]._id}`}>
           <button>Edit</button>
         </Link>
 
         <button onClick={() => deleteReq(dataArray[i]._id)}>Delete</button>
-
+        <button>Notes</button>
         <br></br>
       </div>
     );
+  }
+
+  if (groupInfo) {
+    for (const group in groupInfo) {
+      selectOptions.push(
+        <option value={groupInfo[group]._id}>{groupInfo[group].name}</option>
+      );
+    }
   }
 
   return (
@@ -98,6 +118,21 @@ function ClientPage(props) {
         <br></br>
         <label htmlFor="Source">Source </label>
         <input type="text" id="Source" {...register("Source")}></input>
+        <br></br>
+        <label htmlFor="Notes">Notes </label>
+        <br></br>
+        <textarea
+          type="text"
+          id="Notes"
+          rows={4}
+          cols={50}
+          {...register("Notes")}
+        ></textarea>
+        <br></br>
+        <label htmlFor="GroupName">GroupName</label>
+        <select {...register("GroupName", { required: true })}>
+          {selectOptions}
+        </select>
         <br></br>
         <button>Submit</button>
       </form>
