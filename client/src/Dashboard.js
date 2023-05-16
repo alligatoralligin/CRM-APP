@@ -1,9 +1,39 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
+//Chart.js imports
+import Chart from "chart.js/auto";
+import { CategoryScale } from "chart.js/auto";
+import { Data } from "./ChartData/Data";
+import BarChart from "./Charts/BarChart";
+
 function Dashboard(props) {
   const [totalContactsInfo, setTotalContactsInfo] = useState("");
   const [clientPerUser, setClientPerUser] = useState("");
+  const [chartData, setChartData] = useState("");
+
+  useEffect(() => {
+    if (clientPerUser) {
+      setChartData({
+        labels: clientPerUser.map((data) => data.username),
+        datasets: [
+          {
+            label: "Clients Per User ",
+            data: clientPerUser.map((data) => data.Contacts.length),
+            backgroundColor: [
+              "rgba(75,192,192,1)",
+              "&quot;#ecf0f1",
+              "#50AF95",
+              "#f3ba2f",
+              "#2a71d0",
+            ],
+            borderColor: "black",
+            borderWidth: 2,
+          },
+        ],
+      });
+    }
+  }, [clientPerUser]);
 
   useEffect(() => {
     async function getDashBoardInfo() {
@@ -29,6 +59,7 @@ function Dashboard(props) {
     totalContacts.push(totalContactsInfo[0]["Contacts"]);
   }
 
+  //Showing the clients that each Users has
   let nameToClients = [];
   if (clientPerUser) {
     for (let i = 0; i < clientPerUser.length; i++) {
@@ -40,6 +71,12 @@ function Dashboard(props) {
       );
     }
   }
+  let BarChartRender;
+  if (chartData) {
+    BarChartRender = (
+      <BarChart chartData={chartData} headerInfo={"Client Per User "} />
+    );
+  }
 
   return (
     <div>
@@ -49,6 +86,7 @@ function Dashboard(props) {
         <h2>Clients per User Chart</h2>
         {nameToClients}
       </div>
+      {BarChartRender}
     </div>
   );
 }

@@ -190,8 +190,9 @@ app.post("/create-new-client/:id", async (req, res) => {
 });
 
 app.get("/product-page/:id", async (req, res) => {
-  const findGroups = await SaleGroup.find({ ownerID: req.params.id });
-  console.log(findGroups);
+  const findGroups = await SaleGroup.find({ ownerID: req.params.id }).populate(
+    "Products"
+  );
   res.json({ SaleGroupList: findGroups });
 });
 app.post("/create-new-product/:id", async (req, res) => {
@@ -199,17 +200,52 @@ app.post("/create-new-product/:id", async (req, res) => {
   const newProduct = await Product.create({
     name: req.body.name,
     price: req.body.price,
-    descriptions: req.body.description,
+    description: req.body.description,
     Img: req.body.Img,
     SalesID: req.params.id,
     GroupID: req.body.GroupName,
   });
   findGroup.Products.push(newProduct._id);
   findGroup.save();
+  const findAllGroups = await SaleGroup.find({
+    ownerID: req.params.id,
+  }).populate("Products");
   console.log(newProduct);
   console.log(findGroup);
+  res.json({ newRespGroup: findAllGroups });
 });
 
+app.get("/edit-product/:id", async (req, res) => {
+  const findProduct = await Product.findOne({ _id: req.params.id });
+
+  res.json({ productDataResp: findProduct });
+});
+app.post("/update-product/:productID", async (req, res) => {
+  const updateProduct = await Product.updateOne(
+    {
+      _id: `${req.params.productID}`,
+    },
+    req.body
+  );
+  console.log(updateProduct);
+  console.log("Product Updated");
+});
+
+app.delete("/delete-product/:UserID/:ProductID", async (req, res) => {
+  //find Group by ID
+  const removeFromGroup = await SaleGroup.findOneAndUpdate(
+    { ownerID: req.params.UserID },
+    { $pull: { Products: req.params.ProductID } },
+    { new: true }
+  );
+  const deleteProduct = await Product.deleteOne({ _id: req.params.ProductID });
+  const findAllGroups = await SaleGroup.find({
+    ownerID: req.params.UserID,
+  }).populate("Products");
+  console.log(deleteProduct);
+  console.log(removeFromGroup);
+  res.json({ deleteResp: findAllGroups });
+});
 app.post("/create-group/:id", async (req, res) => {
   // create a new group using the name from the form data
   //using information from req.params.id assign the owner ID for the group
@@ -299,12 +335,12 @@ app.get("/dashboard/:UserID", async (req, res) => {
   }).populate("Users");
   //Total Client Number
   const aggregateResp = await User.aggregate([
-    { $match: { GroupID: groupById[1]._id } },
+    { $match: { GroupID: groupById[0]._id } },
     { $group: { _id: "$Contacts" } },
     { $count: "Contacts" },
   ]);
   //Clients per User
-  const userByGroupID = await User.find({ GroupID: groupById[1]._id }).select({
+  const userByGroupID = await User.find({ GroupID: groupById[0]._id }).select({
     username: 1,
     Contacts: 1,
   });
@@ -317,7 +353,11 @@ app.get("/dashboard/:UserID", async (req, res) => {
   // console.log(populatedContacts);
   console.log(aggregateResp);
   console.log(groupById);
-  res.json({ groupContacts: aggregateResp, userByGroupID: userByGroupID });
+  res.json({
+    groupContacts: aggregateResp,
+    userByGroupID: userByGroupID,
+    contacts: populatedContacts,
+  });
 });
 
 app.listen(port, () => {

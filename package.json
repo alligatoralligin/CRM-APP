@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^7.6.0"
+    "chart.js": "^4.3.0",
+    "concurrently": "^7.6.0",
+    "react-chartjs-2": "^5.2.0"
   }
 }

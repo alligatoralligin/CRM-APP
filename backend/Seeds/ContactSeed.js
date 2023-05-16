@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Contact = require("../Schemas/Contact");
 const User = require("../Schemas/User");
 const SaleGroup = require("../Schemas/SalesGroup");
+const Product = require("../Schemas/Product");
 
 async function main() {
   await mongoose.connect("mongodb://127.0.0.1:27017/CRMAPP");
@@ -16,6 +17,7 @@ async function newContact() {
   await Contact.deleteMany({});
   await User.deleteMany({});
   await SaleGroup.deleteMany({});
+  await Product.deleteMany({});
   createdContact = await Contact.create({
     name: "Jord Dane",
     title: "Retail",

@@ -13,6 +13,7 @@ import Dashboard from "./Dashboard";
 import GroupCreatePage from "./GroupCreatePage";
 import GroupPage from "./GroupPage";
 import ProductPage from "./ProductPage";
+import ProductEdit from "./ProductEdit";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -131,6 +132,14 @@ function App() {
           element={
             <ProtectedRoute isLoggedIn={isLoggedIn}>
               <ProductPage UserID={UserID}></ProductPage>
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="/Product/Edit/:productID"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <ProductEdit UserID={UserID}></ProductEdit>
             </ProtectedRoute>
           }
         ></Route>
