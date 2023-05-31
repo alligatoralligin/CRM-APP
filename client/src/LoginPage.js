@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Button, Grid, Typography, Box, TextField, Stack } from "@mui/material";
 
 export default function LoginPage(props) {
   const { register, handleSubmit, watch, reset } = useForm();
@@ -35,25 +36,65 @@ export default function LoginPage(props) {
 
   watch(["Username", "Password"]);
   return (
-    <div>
-      <h1>Login here</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="Username">Username </label>
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      sx={{ minHeight: "100vh" }}
+    >
+      <Typography variant="h4" gutterBottom>
+        Login
+      </Typography>
+      <Box
+        component="form"
+        sx={{
+          "& .MuiTextField-root": { m: 1, width: "25ch" },
+        }}
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <Stack spacing={2}>
+          <TextField
+            id="Username"
+            label="Username"
+            type="text"
+            {...register("Username", { required: true })}
+          />
+          <TextField
+            id="Password"
+            label="Password"
+            type="password"
+            {...register("Password", { required: true })}
+          />
+          <Button type="submit" variant="outlined" sx={{ mt: 2 }}>
+            Login
+          </Button>
+        </Stack>
+      </Box>
+      {/* <form onSubmit={handleSubmit(onSubmit)}>
+        <label htmlFor="Username">
+          <Typography variant="subtitle1">Username</Typography>
+        </label>
         <input
           type="text"
           id="Username"
           {...register("Username", { required: true })}
         ></input>
         <br></br>
-        <label htmlFor="Password">Password </label>
+        <label htmlFor="Password">
+          <Typography variant="subtitle1">Password</Typography>{" "}
+        </label>
         <input
           type="password"
           id="Password"
           {...register("Password", { required: true })}
         ></input>
         <br></br>
-        <button>Login</button>
-      </form>
-    </div>
+    
+      </form> */}
+    </Grid>
   );
 }

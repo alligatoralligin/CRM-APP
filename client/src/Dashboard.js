@@ -6,6 +6,9 @@ import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js/auto";
 import { Data } from "./ChartData/Data";
 import BarChart from "./Charts/BarChart";
+import { Box, Typography, Grid, Card, CardContent } from "@mui/material";
+import DashBoardCard from "./DBComponents/DashBoardCard";
+import CircularPercent from "./DBComponents/CircularPercent";
 
 function Dashboard(props) {
   const [totalContactsInfo, setTotalContactsInfo] = useState("");
@@ -79,15 +82,80 @@ function Dashboard(props) {
   }
 
   return (
-    <div>
-      <h1>Sales Total By Sales Rep</h1>
-      <h2>Total Customers:{totalContacts}</h2>
-      <div>
-        <h2>Clients per User Chart</h2>
-        {nameToClients}
-      </div>
-      {BarChartRender}
-    </div>
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      sx={{ minHeight: "100vh", mt: 10 }}
+    >
+      <Typography variant="h3" gutterBottom>
+        Dashboard
+      </Typography>
+
+      {/* Placeholder Dashboard Content */}
+      <Box className="cardRowTop" sx={{ display: "flex", mt: 10 }}>
+        <DashBoardCard
+          cardTitle="New Accounts"
+          cardStat="153"
+          cardPercent="58"
+        ></DashBoardCard>
+        <DashBoardCard
+          cardTitle="Total Expenses"
+          cardStat="250"
+          cardPercent="62"
+        ></DashBoardCard>
+        <DashBoardCard
+          cardTitle="Company Value"
+          cardStat="1,45"
+          cardPercent="72"
+        ></DashBoardCard>
+        <DashBoardCard
+          cardTitle="New Employees"
+          cardStat="+34"
+          cardPercent="81"
+        ></DashBoardCard>
+      </Box>
+      <Box className="middleChartRow" sx={{ display: "flex", mt: 10 }}>
+        <Card variant="outlined" sx={{ boxShadow: 1, mr: 10 }}>
+          <CardContent>
+            <Typography variant="h5" gutterBottom>
+              Sales Total By Sales Rep
+            </Typography>
+            <div
+              class="chart-container"
+              style={{ height: "400px", width: "700px" }}
+            >
+              {BarChartRender}
+            </div>
+          </CardContent>
+        </Card>
+        <CircularPercent title="Income" percent="75"></CircularPercent>
+      </Box>
+      <Box className="cardRowBottom" sx={{ display: "flex", mt: 10 }}>
+        <DashBoardCard
+          cardTitle="Income"
+          cardStat="153"
+          cardPercent="58"
+        ></DashBoardCard>
+        <DashBoardCard
+          cardTitle="Expenses"
+          cardStat="250"
+          cardPercent="62"
+        ></DashBoardCard>
+        <DashBoardCard
+          cardTitle="Spending"
+          cardStat="1,45"
+          cardPercent="72"
+        ></DashBoardCard>
+        <DashBoardCard
+          cardTitle="Totals"
+          cardStat="+34"
+          cardPercent="81"
+        ></DashBoardCard>
+      </Box>
+    </Grid>
   );
 }
 

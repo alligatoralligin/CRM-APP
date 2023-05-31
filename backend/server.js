@@ -87,7 +87,7 @@ app.get("/entry", async (req, res) => {
 app.get("/showpage/:id", isLoggedIn, async (req, res) => {
   const showPageData = await User.findById(req.params.id).populate("Contacts");
   const groupInfo = await User.findById(req.params.id).populate("GroupID");
-  console.log(groupInfo);
+  // console.log(groupInfo);
   res.json({ info: showPageData, groupInfo: groupInfo.GroupID });
 });
 
@@ -157,7 +157,7 @@ app.post("/login", async (req, res, next) => {
 app.get("/get-client-by-id/:id", async (req, res) => {
   const findClientbyId = await Contact.findById(req.params.id);
   res.json({ ClientInfo: findClientbyId });
-  console.log(findClientbyId);
+  // console.log(findClientbyId);
 });
 app.post("/create-new-client/:id", async (req, res) => {
   const createNewClient = await Contact.create({
@@ -176,15 +176,15 @@ app.post("/create-new-client/:id", async (req, res) => {
   // await createNewClient.save();
   const foundUser = await User.findById(req.params.id);
   foundUser.Contacts.push(createNewClient);
-  foundUser.ContactsID.push(createNewClient._id);
+  // foundUser.ContactsID.push(createNewClient._id);
   //Instead of storing ID, I will store the entire contact information so that I don't have to populate after
   await foundUser.save();
   const updatedContactList = await User.findById(req.params.id).populate(
     "Contacts"
   );
-  console.log(req.query);
-  console.log(req.body);
-  console.log(createNewClient);
+  // console.log(req.query);
+  // console.log(req.body);
+  // console.log(createNewClient);
   console.log("contact created");
   res.json({ newContactList: updatedContactList });
 });
@@ -303,22 +303,56 @@ app.delete("/remove-from-group/:ownerID/:groupID/:userID", async (req, res) => {
 });
 app.delete("/delete-client/:UserId/:clientid", async (req, res) => {
   const deletedClient = await Contact.deleteOne({ _id: req.params.clientid });
+  const removeClient = await User.updateOne(
+    { _id: req.params.UserId },
+    {
+      $pull: {
+        Contacts: { _id: new mongoose.Types.ObjectId(req.params.clientid) },
+      },
+    },
+    { new: true }
+  );
+  //* Issue was finding mongoose Object _id with req.params.clientid which was a string
   const updatedShowPageData = await User.findById(req.params.UserId).populate(
     "Contacts"
   );
   //updated show page data to refresh the client page when a client is deleted
-  console.log(updatedShowPageData);
-  console.log(deletedClient);
+  // console.log(req.params.clientid);
+  // console.log(updatedShowPageData);
+  // console.log(removeClient);
+  // console.log(typeof req.params.UserId);
+  // console.log(req.params.clientid);
+
   res.json({ updatedClientList: updatedShowPageData });
 });
-app.post("/update-client/:id", async (req, res) => {
+app.post("/update-client/:id/:UserID", async (req, res) => {
   const updateClient = await Contact.updateOne(
     {
       _id: `${req.params.id}`,
     },
     req.body
   );
-  console.log(updateClient);
+  //*******Need to update the client that is stored on the User's contact array
+  const updateUser = await User.updateOne(
+    {
+      _id: `${req.params.UserID}`,
+      "Contacts._id": new mongoose.Types.ObjectId(req.params.id),
+    },
+    {
+      $set: {
+        "Contacts.$.name": req.body.name,
+        "Contacts.$.title": req.body.title,
+        "Contacts.$.Email": req.body.Email,
+        "Contacts.$.phoneNumber": req.body.phoneNumber,
+        "Contacts.$.Source": req.body.Source,
+        "Contacts.$.Notes": req.body.Notes,
+      },
+    }
+  );
+
+  console.log(updateUser);
+  // console.log(updateClient);
+  // console.log(req.body);
   console.log("Client Updated");
 });
 
@@ -334,30 +368,34 @@ app.get("/dashboard/:UserID", async (req, res) => {
     ownerID: req.params.UserID,
   }).populate("Users");
   //Total Client Number
-  const aggregateResp = await User.aggregate([
-    { $match: { GroupID: groupById[0]._id } },
-    { $group: { _id: "$Contacts" } },
-    { $count: "Contacts" },
-  ]);
-  //Clients per User
-  const userByGroupID = await User.find({ GroupID: groupById[0]._id }).select({
-    username: 1,
-    Contacts: 1,
-  });
+  if (groupById[0]) {
+    const aggregateResp = await User.aggregate([
+      { $match: { GroupID: groupById[0]._id } },
+      { $group: { _id: "$Contacts" } },
+      { $count: "Contacts" },
+    ]);
+    //Clients per User
+    const userByGroupID = await User.find({ GroupID: groupById[0]._id }).select(
+      {
+        username: 1,
+        Contacts: 1,
+      }
+    );
 
-  console.log(userByGroupID);
-  const populatedContacts = await User.populate(aggregateResp, {
-    path: "Contacts",
-  });
-  // console.log(groupById);
-  // console.log(populatedContacts);
-  console.log(aggregateResp);
-  console.log(groupById);
-  res.json({
-    groupContacts: aggregateResp,
-    userByGroupID: userByGroupID,
-    contacts: populatedContacts,
-  });
+    console.log(userByGroupID);
+    const populatedContacts = await User.populate(aggregateResp, {
+      path: "Contacts",
+    });
+    // console.log(groupById);
+    // console.log(populatedContacts);
+    console.log(aggregateResp);
+    console.log(groupById);
+    res.json({
+      groupContacts: aggregateResp,
+      userByGroupID: userByGroupID,
+      contacts: populatedContacts,
+    });
+  }
 });
 
 app.listen(port, () => {

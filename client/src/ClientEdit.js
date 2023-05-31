@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { Grid, Stack, Box, Typography, TextField, Button } from "@mui/material";
 
 function ClientEdit(props) {
   const [clientData, setClientData] = useState("");
@@ -41,60 +42,132 @@ function ClientEdit(props) {
   }, [clientData]);
 
   const onSubmit = async (data) => {
-    navigate(`/Clientlist/${props.ClientID}`);
-    await axios.post(`http://localhost:8000/update-client/${id}`, data, {
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    });
+    navigate(`/Clientlist/${props.UserID}`);
+    await axios.post(
+      `http://localhost:8000/update-client/${id}/${props.UserID}`,
+      data,
+      {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      }
+    );
     console.log(data);
   };
 
   console.log(
-    watch(["name", "title", "Email", "phoneNumber", "Source", "notes"])
+    watch(["name", "title", "Email", "phoneNumber", "Source", "Notes"])
   );
   return (
-    <div>
-      <h1>Hello from ClientEdit</h1>
-      <h5>{id}</h5>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="name">name </label>
-        <input
-          type="text"
-          id="name"
-          {...register("name", { required: true })}
-        ></input>
-        <br></br>
-        <label htmlFor="title">title </label>
-        <input type="text" id="title" {...register("title")}></input> <br></br>
-        <label htmlFor="Email">Email </label>
-        <input
-          type="Email"
-          id="Email"
-          {...register("Email", { required: true })}
-        ></input>
-        <br></br>
-        <label htmlFor="phoneNumber">Phone Number </label>
-        <input
-          type="number"
-          id="phoneNumber"
-          {...register("phoneNumber", { required: true })}
-        ></input>
-        <br></br>
-        <label htmlFor="Source">Source </label>
-        <input type="text" id="Source" {...register("Source")}></input>
-        <br></br>
-        <label htmlFor="Notes">Notes </label>
-        <br></br>
-        <textarea
-          type="text"
-          id="Notes"
-          rows={4}
-          cols={50}
-          {...register("Notes")}
-        ></textarea>
-        <br></br>
-        <button>Update</button>
-      </form>
-    </div>
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      sx={{ minHeight: "100vh" }}
+    >
+      <Stack>
+        <h1>Hello from ClientEdit</h1>
+        <h5>{id}</h5>
+
+        <Typography variant="h4" gutterBottom>
+          Update Client
+        </Typography>
+        <Box
+          component="form"
+          sx={{
+            "& .MuiTextField-root": { m: 1, width: "25ch" },
+          }}
+          noValidate
+          autoComplete="off"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <Stack spacing={2}>
+            <TextField
+              id="name"
+              label="name"
+              type="text"
+              {...register("name", { required: true })}
+            />
+            <TextField
+              id="title"
+              label="title"
+              type="text"
+              {...register("title", { required: true })}
+            />
+            <TextField
+              id="Email"
+              label="Email"
+              type="Email"
+              {...register("Email", { required: true })}
+            />
+            <TextField
+              id="phoneNumber"
+              label="phoneNumber"
+              type="number"
+              {...register("phoneNumber", { required: true })}
+            />
+            <TextField
+              id="Source"
+              label="Source"
+              type="text"
+              {...register("Source", { required: true })}
+            />
+            <br></br>
+            <TextField
+              id="Notes"
+              label="Notes"
+              type="text"
+              multiline
+              rows={4}
+              {...register("Notes", { required: true })}
+            />
+            <Button type="submit" variant="outlined" sx={{ mt: 2 }}>
+              Update
+            </Button>
+          </Stack>
+        </Box>
+        {/* <form onSubmit={handleSubmit(onSubmit)}>
+          <label htmlFor="name">name </label>
+          <input
+            type="text"
+            id="name"
+            {...register("name", { required: true })}
+          ></input>
+          <br></br>
+          <label htmlFor="title">title </label>
+          <input type="text" id="title" {...register("title")}></input>{" "}
+          <br></br>
+          <label htmlFor="Email">Email </label>
+          <input
+            type="Email"
+            id="Email"
+            {...register("Email", { required: true })}
+          ></input>
+          <br></br>
+          <label htmlFor="phoneNumber">Phone Number </label>
+          <input
+            type="number"
+            id="phoneNumber"
+            {...register("phoneNumber", { required: true })}
+          ></input>
+          <br></br>
+          <label htmlFor="Source">Source </label>
+          <input type="text" id="Source" {...register("Source")}></input>
+          <br></br>
+          <label htmlFor="Notes">Notes </label>
+          <br></br>
+          <textarea
+            type="text"
+            id="Notes"
+            rows={4}
+            cols={50}
+            {...register("Notes")}
+          ></textarea>
+          <br></br>
+          <button>Update</button>
+        </form> */}
+      </Stack>
+    </Grid>
   );
 }
 

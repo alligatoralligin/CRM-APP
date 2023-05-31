@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Grid } from "@mui/material";
 
 function GroupPage(props) {
   const [GroupData, setGroupData] = useState("");
@@ -95,8 +96,15 @@ function GroupPage(props) {
   console.log(groupMemberRender);
 
   return (
-    <div>
-      <h1>Hello from Sale Group Page</h1>
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      sx={{ minHeight: "100vh" }}
+    >
+      <h1>Sale Group Page</h1>
       <h2>{GroupData.name}</h2>
       <h2>Add a member to {GroupData.name}</h2>
 
@@ -117,7 +125,7 @@ function GroupPage(props) {
       </form>
       <h2> Group Members</h2>
       {groupMemberRender}
-    </div>
+    </Grid>
   );
 }
 

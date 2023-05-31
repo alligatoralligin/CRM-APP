@@ -14,6 +14,10 @@ import GroupCreatePage from "./GroupCreatePage";
 import GroupPage from "./GroupPage";
 import ProductPage from "./ProductPage";
 import ProductEdit from "./ProductEdit";
+// Theme Provider
+import theme from "./Themes/Theme";
+import { ThemeProvider } from "@mui/material/styles";
+import MiniDrawer from "./DrawerComp";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -57,11 +61,17 @@ function App() {
   console.log(sessionCookie);
   return (
     <div>
-      <Navbar
+      <MiniDrawer
         isLoggedIn={isLoggedIn}
         UserID={UserID}
         handleLogout={handleLogout}
-      ></Navbar>
+      ></MiniDrawer>
+      {/* <Navbar
+        isLoggedIn={isLoggedIn}
+        UserID={UserID}
+        handleLogout={handleLogout}
+      ></Navbar> */}
+
       <Routes>
         <Route path="/Home" element={<HomePage></HomePage>}></Route>
         <Route

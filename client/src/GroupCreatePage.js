@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { Grid } from "@mui/material";
 
 function GroupCreatePage(props) {
   const { register, handleSubmit, watch, reset } = useForm();
@@ -18,7 +19,14 @@ function GroupCreatePage(props) {
   };
   watch(["groupName"]);
   return (
-    <div>
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      sx={{ minHeight: "100vh" }}
+    >
       <h1>Hello from GroupCreatePage</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="groupName">Enter Group Name here</label>
@@ -29,7 +37,7 @@ function GroupCreatePage(props) {
         ></input>
         <button>Submit</button>
       </form>
-    </div>
+    </Grid>
   );
 }
 
