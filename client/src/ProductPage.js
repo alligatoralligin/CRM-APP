@@ -4,6 +4,16 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import {
+  Grid,
+  Typography,
+  Box,
+  Stack,
+  TextField,
+  Button,
+  CardContent,
+  Card,
+} from "@mui/material";
 
 function ProductPage(props) {
   const { register, handleSubmit, watch, reset, getValues } = useForm();
@@ -63,34 +73,96 @@ function ProductPage(props) {
       productDisplay.push(<p>{SaleGroupList[group].name}</p>);
       for (const item in SaleGroupList[group].Products) {
         productDisplay.push(
-          <p>
-            Product Name:{SaleGroupList[group].Products[item].name} <br></br>
-            Price:
-            {SaleGroupList[group].Products[item].price}
-            <br></br>
-            Product Description:
-            {SaleGroupList[group].Products[item].description}
-            <br></br>
-            <button
-              onClick={() => deleteReq(SaleGroupList[group].Products[item]._id)}
-            >
-              Delete
-            </button>
-            <Link
-              to={`/Product/Edit/${SaleGroupList[group].Products[item]._id}`}
-            >
-              <button>Edit</button>
-            </Link>
-          </p>
+          <Card variant="outlined" sx={{ p: 2 }}>
+            <CardContent>
+              Product Name:{SaleGroupList[group].Products[item].name} <br></br>
+              Price:
+              {SaleGroupList[group].Products[item].price}
+              <br></br>
+              Product Description:
+              {SaleGroupList[group].Products[item].description}
+              <br></br>
+              <Button
+                onClick={() =>
+                  deleteReq(SaleGroupList[group].Products[item]._id)
+                }
+                variant="contained"
+                color="error"
+                sx={{ mr: 1 }}
+              >
+                Delete
+              </Button>
+              <Link
+                to={`/Product/Edit/${SaleGroupList[group].Products[item]._id}`}
+              >
+                <Button variant="contained" color="info">
+                  Edit
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
         );
       }
     }
   }
 
   return (
-    <div>
-      <h1>Hello from Product Page</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      sx={{ minHeight: "100vh" }}
+    >
+      <Typography variant="h3" gutterBottom>
+        Hello from Product Page
+      </Typography>
+      <Box
+        component="form"
+        sx={{
+          "& .MuiTextField-root": { m: 1, width: "25ch" },
+        }}
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <Stack spacing={2}>
+          <TextField
+            id="name"
+            label="name"
+            type="text"
+            {...register("name", { required: true })}
+          />
+          <TextField
+            id="price"
+            label="price"
+            type="number"
+            {...register("price", { required: true })}
+          />
+          <TextField
+            id="Img"
+            label="Image Link"
+            type="text"
+            {...register("Img", { required: false })}
+          />
+          <select {...register("GroupName", { required: true })}>
+            {selectOptions}
+          </select>
+          <TextField
+            id="description"
+            label="description"
+            type="text"
+            multiline
+            rows={4}
+            {...register("description", { required: false })}
+          />
+          <Button type="submit" variant="outlined" sx={{ mt: 2 }}>
+            Submit
+          </Button>
+        </Stack>
+      </Box>
+      {/* <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="name">name </label>
         <input
           type="text"
@@ -123,10 +195,10 @@ function ProductPage(props) {
         ></input>
         <br></br>
         <button>Submit</button>
-      </form>
-      <h2>View Group Products Here</h2>
+      </form> */}
+      <Typography variant="h6">View Group Products Here</Typography>
       {productDisplay}
-    </div>
+    </Grid>
   );
 }
 export default ProductPage;

@@ -24,7 +24,9 @@ import PersonIcon from "@mui/icons-material/Person";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import GroupsIcon from "@mui/icons-material/Groups";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import InventoryIcon from "@mui/icons-material/Inventory";
 import Grid from "@mui/material/Grid";
+import { Button } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -112,6 +114,7 @@ export default function MiniDrawer(props) {
     `/Group-Page/${props.UserID}`,
   ];
 
+  let navLinkList = [`/Product-Page/${props.UserID}`];
   let DrawerIcons2 = [
     <PersonIcon />,
     <DashboardIcon />,
@@ -119,6 +122,36 @@ export default function MiniDrawer(props) {
     <GroupsIcon />,
   ];
 
+  let DrawerIcons = [<InventoryIcon />];
+
+  let LoginButtons;
+
+  if (props.isLoggedIn) {
+    LoginButtons = (
+      <NavLink to="/Home" onClick={props.handleLogout}>
+        <Button variant="contained" color="warning" sx={{ mr: 1 }}>
+          <Typography variant="h7">Logout</Typography>
+        </Button>
+      </NavLink>
+    );
+  }
+  if (!props.isLoggedIn) {
+    LoginButtons = (
+      <div>
+        <NavLink to="/Login">
+          <Button variant="contained" color="success" sx={{ mr: 1 }}>
+            <Typography variant="h7">Login</Typography>
+          </Button>
+        </NavLink>
+
+        <NavLink to="/Register">
+          <Button variant="contained" color="info">
+            <Typography variant="h7">Register </Typography>
+          </Button>
+        </NavLink>
+      </div>
+    );
+  }
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -143,17 +176,13 @@ export default function MiniDrawer(props) {
               </Typography>
             </Box>
             <Box alignSelf={"flex-end"}>
-              <Typography variant="h7">
-                <NavLink to="/Login">Login &nbsp;</NavLink>
+              {/* Placeholder for User Image */}
+              <PersonIcon></PersonIcon>
+              <Typography variant="h7" sx={{ mr: 2 }}>
+                {props.Username}
               </Typography>
-              <Typography variant="h7">
-                <NavLink to="/Home" onClick={props.handleLogout}>
-                  Logout &nbsp;
-                </NavLink>
-              </Typography>
-              <Typography variant="h7">
-                <NavLink to="/Register">Register &nbsp;</NavLink>
-              </Typography>
+
+              {LoginButtons}
             </Box>
           </Grid>
         </Toolbar>
@@ -168,31 +197,7 @@ export default function MiniDrawer(props) {
             )}
           </IconButton>
         </DrawerHeader>
-        <Divider />
-        <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+
         <Divider />
         <List>
           {["Client Page", "Dashboard", "Create Group", "Group Page"].map(
@@ -244,6 +249,33 @@ export default function MiniDrawer(props) {
               </ListItemButton>
             </ListItem>
           </NavLink> */}
+        </List>
+        <Divider />
+        <List>
+          {["Product"].map((text, index) => (
+            <NavLink to={navLinkList[index]}>
+              <ListItem key={text} disablePadding sx={{ display: "block" }}>
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {DrawerIcons[index]}
+                  </ListItemIcon>
+                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+            </NavLink>
+          ))}
         </List>
       </Drawer>
     </Box>

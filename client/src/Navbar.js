@@ -6,7 +6,7 @@ export default function Navbar(props) {
   if (props.isLoggedIn === false) {
     LoggedOutRoutes.push(
       <NavLink to="/Register"> -Register Page </NavLink>,
-      <NavLink to="/Login"> -Login Page</NavLink>
+      <NavLink to="/Login">-Login Page</NavLink>
     );
   }
   return (

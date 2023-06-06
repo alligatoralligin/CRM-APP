@@ -52,6 +52,7 @@ function ClientPage(props) {
     "Source",
     "Notes",
     "GroupName",
+    "ContactStatus",
   ]);
 
   //useEffect to fetch the contacts that are associated with the UserID that is currently logged in
@@ -142,61 +143,62 @@ function ClientPage(props) {
   return (
     <Box sx={{ display: "flex", mt: 10, justifyContent: "center" }}>
       <div>
-        <Typography variant="h2" gutterBottom>
+        <Typography variant="h3" gutterBottom>
           Client Page
         </Typography>
-
-        <Box
-          component="form"
-          sx={{
-            "& .MuiTextField-root": { m: 1, width: "25ch" },
-          }}
-          noValidate
-          autoComplete="off"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <div>
-            <Typography variant="h4">Add a client here</Typography>
-            <TextField
-              id="name"
-              label="name"
-              type="text"
-              {...register("name", { required: true })}
-            />
-            <TextField
-              id="title"
-              label="title"
-              type="text"
-              {...register("title", { required: true })}
-            />
-            <TextField
-              id="Email"
-              label="Email"
-              type="Email"
-              {...register("Email", { required: true })}
-            />
-            <TextField
-              id="phoneNumber"
-              label="phoneNumber"
-              type="number"
-              {...register("phoneNumber", { required: true })}
-            />
-            <TextField
-              id="Source"
-              label="Source"
-              type="text"
-              {...register("Source", { required: true })}
-            />
-            <br></br>
-            <TextField
-              id="Notes"
-              label="Notes"
-              type="text"
-              multiline
-              rows={4}
-              {...register("Notes", { required: true })}
-            />
-            {/* <TextField
+        <Card>
+          <CardContent>
+            <Box
+              component="form"
+              sx={{
+                "& .MuiTextField-root": { m: 1, width: "25ch" },
+              }}
+              noValidate
+              autoComplete="off"
+              onSubmit={handleSubmit(onSubmit)}
+            >
+              <div>
+                <Typography variant="h4">Add a client here</Typography>
+                <TextField
+                  id="name"
+                  label="name"
+                  type="text"
+                  {...register("name", { required: true })}
+                />
+                <TextField
+                  id="title"
+                  label="title"
+                  type="text"
+                  {...register("title", { required: true })}
+                />
+                <TextField
+                  id="Email"
+                  label="Email"
+                  type="Email"
+                  {...register("Email", { required: true })}
+                />
+                <TextField
+                  id="phoneNumber"
+                  label="phoneNumber"
+                  type="number"
+                  {...register("phoneNumber", { required: true })}
+                />
+                <TextField
+                  id="Source"
+                  label="Source"
+                  type="text"
+                  {...register("Source", { required: true })}
+                />
+                <br></br>
+                <TextField
+                  id="Notes"
+                  label="Notes"
+                  type="text"
+                  multiline
+                  rows={4}
+                  {...register("Notes", { required: true })}
+                />
+                {/* <TextField
             select
             label="GroupName"
             defaultValue={""}
@@ -205,8 +207,10 @@ function ClientPage(props) {
           >
             {selectOptions}
           </TextField> */}
-          </div>
-        </Box>
+              </div>
+            </Box>
+          </CardContent>
+        </Card>
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* <label htmlFor="name">name </label>
         <input
@@ -249,6 +253,19 @@ function ClientPage(props) {
             {selectOptions}
           </select>
           {/* Need to change group select to Material UI */}
+          <br></br>
+          <label htmlFor="ContactStatus">Contact Status</label>
+          <select {...register("ContactStatus", { required: true })}>
+            <option value="opportunity">New Opportunity</option>
+            <option value="contacting">Contacting</option>
+            <option value="engaging">Engaging</option>
+            <option value="qualified">Qualified</option>
+            {/* custom stages is different for each company will try to make this step customizable later. Place holder atm */}
+            <option value="customStages">Custom stages</option>
+            <option value="closing">Closing</option>
+            <option value="Success">Success</option>
+            <option value="Failure">Failure</option>
+          </select>
           <br></br>
           <button>Submit</button>
         </form>

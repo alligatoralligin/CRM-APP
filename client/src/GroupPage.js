@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Grid } from "@mui/material";
+import { CardContent, Grid, Typography, Card, Button } from "@mui/material";
+import GroupRemoveIcon from "@mui/icons-material/GroupRemove";
 
 function GroupPage(props) {
   const [GroupData, setGroupData] = useState("");
@@ -67,19 +68,30 @@ function GroupPage(props) {
       groupMemberRender.push(<h3>{GroupData[group].name}</h3>);
       for (let i = 0; i < userList.length; i++) {
         groupMemberRender.push(
-          <div>
-            <p>Username:{userList[i].username} </p>
-            <p>Email:{userList[i].Email}</p>
-            <p>Group:{userList[i].Group}</p>
+          <Card variant="outlined" sx={{ minWidth: "350px", marginBottom: 2 }}>
+            <CardContent>
+              <div>
+                <Typography variant="subtitle1">
+                  Username:{userList[i].username}
+                </Typography>
+                <Typography variant="subtitle1">
+                  Email:{userList[i].Email}
+                </Typography>
+                <Typography variant="subtitle1">
+                  Group:{userList[i].Group}
+                </Typography>
 
-            <button
-              onClick={() =>
-                removefromGroup(GroupData[group]._id, userList[i]._id)
-              }
-            >
-              x
-            </button>
-          </div>
+                <Button
+                  variant="outlined"
+                  onClick={() =>
+                    removefromGroup(GroupData[group]._id, userList[i]._id)
+                  }
+                >
+                  <GroupRemoveIcon />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         );
       }
     }
@@ -104,9 +116,9 @@ function GroupPage(props) {
       justifyContent="center"
       sx={{ minHeight: "100vh" }}
     >
-      <h1>Sale Group Page</h1>
+      <Typography variant="h3">Sale Group Page</Typography>
       <h2>{GroupData.name}</h2>
-      <h2>Add a member to {GroupData.name}</h2>
+      <Typography variant="h6">Add a member to {GroupData.name}</Typography>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="GroupName">GroupName</label>
@@ -123,7 +135,7 @@ function GroupPage(props) {
         <br></br>
         <button>Submit</button>
       </form>
-      <h2> Group Members</h2>
+      <Typography variant="h4"> Group Members</Typography>
       {groupMemberRender}
     </Grid>
   );

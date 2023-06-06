@@ -168,6 +168,8 @@ app.post("/create-new-client/:id", async (req, res) => {
     Source: req.body.Source,
     Notes: req.body.Notes,
     User: req.params.id,
+    AssignedGroup: req.body.GroupName,
+    ContactStatus: req.body.ContactStatus,
   });
   // const addIds = await Contact.updateOne(
   //   { id: createNewClient._id },
@@ -186,6 +188,7 @@ app.post("/create-new-client/:id", async (req, res) => {
   // console.log(req.body);
   // console.log(createNewClient);
   console.log("contact created");
+  console.log(createNewClient);
   res.json({ newContactList: updatedContactList });
 });
 

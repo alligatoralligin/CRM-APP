@@ -23,6 +23,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [UserID, setUserID] = useState(null);
   const [groupIDArray, setGroupIDArray] = useState(null);
+  const [currentUsername, setCurrentUsername] = useState(null);
   const handleLogin = () => setIsLoggedIn(true);
   const handleLogout = () => {
     localStorage.clear();
@@ -59,12 +60,20 @@ function App() {
   }, [isLoggedIn]);
 
   console.log(sessionCookie);
+
+  useEffect(() => {
+    const Username = localStorage.getItem("Username");
+    if (Username) {
+      setCurrentUsername(Username);
+    }
+  });
   return (
     <div>
       <MiniDrawer
         isLoggedIn={isLoggedIn}
         UserID={UserID}
         handleLogout={handleLogout}
+        Username={currentUsername}
       ></MiniDrawer>
       {/* <Navbar
         isLoggedIn={isLoggedIn}

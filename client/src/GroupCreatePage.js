@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 
 function GroupCreatePage(props) {
   const { register, handleSubmit, watch, reset } = useForm();
@@ -27,7 +27,9 @@ function GroupCreatePage(props) {
       justifyContent="center"
       sx={{ minHeight: "100vh" }}
     >
-      <h1>Hello from GroupCreatePage</h1>
+      <Typography variant="h3" gutterBottom>
+        Hello from GroupCreatePage
+      </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="groupName">Enter Group Name here</label>
         <input
