@@ -81,25 +81,37 @@ function ClientPage(props) {
   for (let i = 0; i < dataArray.length; i++) {
     ShowPageContent.push(
       <Grid item xs={8}>
-        <Card variant="outlined" sx={{ maxWidth: "80%", mb: 2, boxShadow: 1 }}>
+        <Card
+          variant="outlined"
+          sx={{ minWidth: "700px", mt: 3, boxShadow: 1 }}
+        >
           <CardContent align="center">
-            <Typography variant="subtitle1">
+            <Typography variant="subtitle1" style={{ wordWrap: "break-word" }}>
               Name:{dataArray[i].name}
             </Typography>
-            <Typography variant="subtitle1">
+            <Typography variant="subtitle1" style={{ wordWrap: "break-word" }}>
               Title:{dataArray[i].title}
             </Typography>
-            <Typography variant="subtitle1">
+            <Typography variant="subtitle1" style={{ wordWrap: "break-word" }}>
               Email:{dataArray[i].Email}
             </Typography>
             <Typography variant="subtitle1">
               phoneNumber:{dataArray[i].phoneNumber}
             </Typography>
-            <Typography variant="subtitle1">
+            <Typography variant="subtitle1" style={{ wordWrap: "break-word" }}>
               Source:{dataArray[i].Source}
             </Typography>
             <Typography variant="subtitle1">
               Notes:{dataArray[i].Notes}
+            </Typography>
+            <Typography variant="subtitle1">
+              Contact Status: {dataArray[i].ContactStatus}
+            </Typography>
+            <Typography variant="subtitle1">
+              Date Created:{dataArray[i].createdAt}
+            </Typography>
+            <Typography variant="subtitle1">
+              Last Updated:{dataArray[i].updatedAt}
             </Typography>
             {/* <p>Name:{dataArray[i].name}</p> 
          <p>Title:{dataArray[i].title}</p>
@@ -141,140 +153,104 @@ function ClientPage(props) {
   }
 
   return (
-    <Box sx={{ display: "flex", mt: 10, justifyContent: "center" }}>
+    <Box>
       <div>
-        <Typography variant="h3" gutterBottom>
-          Client Page
-        </Typography>
-        <Card>
-          <CardContent>
-            <Box
-              component="form"
-              sx={{
-                "& .MuiTextField-root": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              <div>
-                <Typography variant="h4">Add a client here</Typography>
-                <TextField
-                  id="name"
-                  label="name"
-                  type="text"
-                  {...register("name", { required: true })}
-                />
-                <TextField
-                  id="title"
-                  label="title"
-                  type="text"
-                  {...register("title", { required: true })}
-                />
-                <TextField
-                  id="Email"
-                  label="Email"
-                  type="Email"
-                  {...register("Email", { required: true })}
-                />
-                <TextField
-                  id="phoneNumber"
-                  label="phoneNumber"
-                  type="number"
-                  {...register("phoneNumber", { required: true })}
-                />
-                <TextField
-                  id="Source"
-                  label="Source"
-                  type="text"
-                  {...register("Source", { required: true })}
-                />
-                <br></br>
-                <TextField
-                  id="Notes"
-                  label="Notes"
-                  type="text"
-                  multiline
-                  rows={4}
-                  {...register("Notes", { required: true })}
-                />
-                {/* <TextField
-            select
-            label="GroupName"
-            defaultValue={""}
-            inputRef={{ ...register("Notes", { required: true }) }}
-            helperText="Select Sales Group Here"
-          >
-            {selectOptions}
-          </TextField> */}
-              </div>
-            </Box>
-          </CardContent>
-        </Card>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {/* <label htmlFor="name">name </label>
-        <input
-          type="text"
-          id="name"
-          {...register("name", { required: true })}
-        ></input> */}
-          {/* <br></br>
-        <label htmlFor="title">title </label>
-        <input type="text" id="title" {...register("title")}></input> <br></br> */}
-          {/* <label htmlFor="Email">Email </label>
-        <input
-          type="Email"
-          id="Email"
-          {...register("Email", { required: true })}
-        ></input>
-        <br></br> */}
-          {/* <label htmlFor="phoneNumber">Phone Number </label>
-        <input
-          type="number"
-          id="phoneNumber"
-          {...register("phoneNumber", { required: true })}
-        ></input> */}
-          {/* <br></br>
-        <label htmlFor="Source">Source </label>
-        <input type="text" id="Source" {...register("Source")}></input>
-        <br></br> */}
-          {/* <label htmlFor="Notes">Notes </label>
-        <br></br>
-        <textarea
-          type="text"
-          id="Notes"
-          rows={4}
-          cols={50}
-          {...register("Notes")}
-        ></textarea> */}
-          <br></br>
-          <label htmlFor="GroupName">GroupName</label>
-          <select {...register("GroupName", { required: true })}>
-            {selectOptions}
-          </select>
-          {/* Need to change group select to Material UI */}
-          <br></br>
-          <label htmlFor="ContactStatus">Contact Status</label>
-          <select {...register("ContactStatus", { required: true })}>
-            <option value="opportunity">New Opportunity</option>
-            <option value="contacting">Contacting</option>
-            <option value="engaging">Engaging</option>
-            <option value="qualified">Qualified</option>
-            {/* custom stages is different for each company will try to make this step customizable later. Place holder atm */}
-            <option value="customStages">Custom stages</option>
-            <option value="closing">Closing</option>
-            <option value="Success">Success</option>
-            <option value="Failure">Failure</option>
-          </select>
-          <br></br>
-          <button>Submit</button>
-        </form>
         <Grid
           container
-          sx={{ display: "flex", justifyContent: "right", mt: 20 }}
+          spacing={0}
+          direction="column"
+          alignItems="center"
+          justify="center"
+          style={{ minHeight: "100vh" }}
         >
+          <Typography variant="h3" sx={{ mt: 10 }} gutterBottom>
+            Client Page
+          </Typography>
+          <Card>
+            <CardContent>
+              <Box
+                component="form"
+                sx={{
+                  "& .MuiTextField-root": { m: 1, width: "25ch" },
+                }}
+                noValidate
+                autoComplete="off"
+                onSubmit={handleSubmit(onSubmit)}
+              >
+                <div>
+                  <Typography variant="h4">Add a client here</Typography>
+                  <TextField
+                    id="name"
+                    label="name"
+                    type="text"
+                    {...register("name", { required: true })}
+                  />
+                  <TextField
+                    id="title"
+                    label="title"
+                    type="text"
+                    {...register("title", { required: true })}
+                  />
+                  <TextField
+                    id="Email"
+                    label="Email"
+                    type="Email"
+                    {...register("Email", { required: true })}
+                  />
+                  <TextField
+                    id="phoneNumber"
+                    label="phoneNumber"
+                    type="number"
+                    {...register("phoneNumber", { required: true })}
+                  />
+                  <TextField
+                    id="Source"
+                    label="Source"
+                    type="text"
+                    {...register("Source", { required: true })}
+                  />
+                  <br></br>
+                  <TextField
+                    id="Notes"
+                    label="Notes"
+                    type="text"
+                    multiline
+                    rows={4}
+                    {...register("Notes", { required: true })}
+                  />
+                </div>
+              </Box>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <br></br>
+                <label htmlFor="GroupName">GroupName</label>
+                <select {...register("GroupName", { required: true })}>
+                  {selectOptions}
+                </select>
+                {/* Need to change group select to Material UI */}
+                <br></br>
+                <label htmlFor="ContactStatus">Contact Status</label>
+                <select {...register("ContactStatus", { required: true })}>
+                  <option value="opportunity">New Opportunity</option>
+                  <option value="contacting">Contacting</option>
+                  <option value="engaging">Engaging</option>
+                  <option value="qualified">Qualified</option>
+                  {/* custom stages is different for each company will try to make this step customizable later. Place holder atm */}
+                  <option value="customStages">Custom stages</option>
+                  <option value="closing">Closing</option>
+                  <option value="Success">Success</option>
+                  <option value="Failure">Failure</option>
+                </select>
+                <br></br>
+                <button>Submit</button>
+              </form>
+            </CardContent>
+          </Card>
           {ShowPageContent}
         </Grid>
+        <Grid
+          container
+          sx={{ display: "flex", justifyContent: "right" }}
+        ></Grid>
       </div>
     </Box>
   );

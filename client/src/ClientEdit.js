@@ -10,6 +10,7 @@ function ClientEdit(props) {
   const { register, handleSubmit, watch, reset } = useForm();
   const { id } = useParams();
   const navigate = useNavigate();
+
   useEffect(() => {
     async function getClientData() {
       try {
@@ -35,6 +36,7 @@ function ClientEdit(props) {
       defaultValues.phoneNumber = `${clientData.phoneNumber}`;
       defaultValues.Source = `${clientData.Source}`;
       defaultValues.Notes = `${clientData.Notes}`;
+      defaultValues.ContactStatus = `${clientData.ContactStatus}`;
 
       reset({ ...defaultValues });
     }
@@ -121,6 +123,19 @@ function ClientEdit(props) {
               rows={4}
               {...register("Notes", { required: true })}
             />
+            <br></br>
+            <label htmlFor="ContactStatus">Contact Status</label>
+            <select {...register("ContactStatus", { required: true })}>
+              <option value="opportunity">New Opportunity</option>
+              <option value="contacting">Contacting</option>
+              <option value="engaging">Engaging</option>
+              <option value="qualified">Qualified</option>
+              {/* custom stages is different for each company will try to make this step customizable later. Place holder atm */}
+              <option value="customStages">Custom stages</option>
+              <option value="closing">Closing</option>
+              <option value="Success">Success</option>
+              <option value="Failure">Failure</option>
+            </select>
             <Button type="submit" variant="outlined" sx={{ mt: 2 }}>
               Update
             </Button>

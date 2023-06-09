@@ -13,6 +13,8 @@ const contactSchema = new mongoose.Schema({
   AssignedGroup: String,
   Notes: String,
   ContactStatus: String,
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
 });
 
 const Contact = mongoose.model("Contact", contactSchema);

@@ -19,6 +19,8 @@ const User = require("./Schemas/User");
 
 const session = require("express-session");
 
+//adding the Date Object for Document Date
+const date = new Date();
 //App.use
 app.use(
   cors({
@@ -335,6 +337,7 @@ app.post("/update-client/:id/:UserID", async (req, res) => {
     },
     req.body
   );
+
   //*******Need to update the client that is stored on the User's contact array
   const updateUser = await User.updateOne(
     {
@@ -349,11 +352,14 @@ app.post("/update-client/:id/:UserID", async (req, res) => {
         "Contacts.$.phoneNumber": req.body.phoneNumber,
         "Contacts.$.Source": req.body.Source,
         "Contacts.$.Notes": req.body.Notes,
+        "Contacts.$.ContactStatus": req.body.ContactStatus,
+        "Contacts.$.updatedAt": date,
       },
     }
   );
 
   console.log(updateUser);
+
   // console.log(updateClient);
   // console.log(req.body);
   console.log("Client Updated");
