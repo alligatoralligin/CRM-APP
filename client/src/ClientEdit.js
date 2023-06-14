@@ -3,13 +3,24 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { Grid, Stack, Box, Typography, TextField, Button } from "@mui/material";
+import {
+  Grid,
+  Stack,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  Paper,
+} from "@mui/material";
 
 function ClientEdit(props) {
   const [clientData, setClientData] = useState("");
   const { register, handleSubmit, watch, reset } = useForm();
   const { id } = useParams();
   const navigate = useNavigate();
+  const [productList, setProductList] = useState("");
 
   useEffect(() => {
     async function getClientData() {
@@ -25,6 +36,21 @@ function ClientEdit(props) {
     }
 
     getClientData();
+  }, []);
+
+  useEffect(() => {
+    async function getProducts() {
+      try {
+        const res = await axios.get(
+          `http://localhost:8000/product-page/${props.UserID}`
+        );
+        setProductList(res.data.SaleGroupList[0].Products);
+        console.log(productList);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getProducts();
   }, []);
 
   useEffect(() => {
@@ -55,92 +81,121 @@ function ClientEdit(props) {
     console.log(data);
   };
 
-  console.log(
-    watch(["name", "title", "Email", "phoneNumber", "Source", "Notes"])
-  );
+  watch(["name", "title", "Email", "phoneNumber", "Source", "Notes"]);
+
+  let productRender = [];
+
+  for (const product in productList) {
+    productRender.push(
+      <Card variant="outlined" sx={{ p: 2 }}>
+        <CardContent>
+          <Typography variant="subtitle1" gutterBottom>
+            Product Name:{productList[product].name}
+          </Typography>
+          <Typography variant="subtitle1">
+            Price: {productList[product].price}
+          </Typography>
+          <Typography variant="subtitle1">
+            Product Description: {productList[product].description}
+          </Typography>
+          <Typography variant="subtitle1">
+            Product ID: {productList[product]._id}
+          </Typography>
+          <Button variant="contained" color="info" sx={{ mr: 1 }}>
+            +
+          </Button>
+          <Button variant="contained" color="info">
+            -
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Grid
       container
       spacing={0}
-      direction="column"
+      // direction="column"
       alignItems="center"
       justifyContent="center"
       sx={{ minHeight: "100vh" }}
     >
-      <Stack>
+      <Stack sx={{ mt: 10 }}>
         <h1>Hello from ClientEdit</h1>
         <h5>{id}</h5>
-
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h5" gutterBottom>
           Update Client
         </Typography>
-        <Box
-          component="form"
-          sx={{
-            "& .MuiTextField-root": { m: 1, width: "25ch" },
-          }}
-          noValidate
-          autoComplete="off"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <Stack spacing={2}>
-            <TextField
-              id="name"
-              label="name"
-              type="text"
-              {...register("name", { required: true })}
-            />
-            <TextField
-              id="title"
-              label="title"
-              type="text"
-              {...register("title", { required: true })}
-            />
-            <TextField
-              id="Email"
-              label="Email"
-              type="Email"
-              {...register("Email", { required: true })}
-            />
-            <TextField
-              id="phoneNumber"
-              label="phoneNumber"
-              type="number"
-              {...register("phoneNumber", { required: true })}
-            />
-            <TextField
-              id="Source"
-              label="Source"
-              type="text"
-              {...register("Source", { required: true })}
-            />
-            <br></br>
-            <TextField
-              id="Notes"
-              label="Notes"
-              type="text"
-              multiline
-              rows={4}
-              {...register("Notes", { required: true })}
-            />
-            <br></br>
-            <label htmlFor="ContactStatus">Contact Status</label>
-            <select {...register("ContactStatus", { required: true })}>
-              <option value="opportunity">New Opportunity</option>
-              <option value="contacting">Contacting</option>
-              <option value="engaging">Engaging</option>
-              <option value="qualified">Qualified</option>
-              {/* custom stages is different for each company will try to make this step customizable later. Place holder atm */}
-              <option value="customStages">Custom stages</option>
-              <option value="closing">Closing</option>
-              <option value="Success">Success</option>
-              <option value="Failure">Failure</option>
-            </select>
-            <Button type="submit" variant="outlined" sx={{ mt: 2 }}>
-              Update
-            </Button>
-          </Stack>
-        </Box>
+        <Grid item xs={6}>
+          <Box
+            component="form"
+            sx={{
+              "& .MuiTextField-root": { m: 1, width: "25ch" },
+            }}
+            noValidate
+            autoComplete="off"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <Stack spacing={2}>
+              <TextField
+                id="name"
+                label="name"
+                type="text"
+                {...register("name", { required: true })}
+              />
+              <TextField
+                id="title"
+                label="title"
+                type="text"
+                {...register("title", { required: true })}
+              />
+              <TextField
+                id="Email"
+                label="Email"
+                type="Email"
+                {...register("Email", { required: true })}
+              />
+              <TextField
+                id="phoneNumber"
+                label="phoneNumber"
+                type="number"
+                {...register("phoneNumber", { required: true })}
+              />
+              <TextField
+                id="Source"
+                label="Source"
+                type="text"
+                {...register("Source", { required: true })}
+              />
+              <br></br>
+              <TextField
+                id="Notes"
+                label="Notes"
+                type="text"
+                multiline
+                rows={4}
+                {...register("Notes", { required: true })}
+              />
+              <br></br>
+              <label htmlFor="ContactStatus">Contact Status</label>
+              <select {...register("ContactStatus", { required: true })}>
+                <option value="opportunity">New Opportunity</option>
+                <option value="contacting">Contacting</option>
+                <option value="engaging">Engaging</option>
+                <option value="qualified">Qualified</option>
+                {/* custom stages is different for each company will try to make this step customizable later. Place holder atm */}
+                <option value="customStages">Custom stages</option>
+                <option value="closing">Closing</option>
+                <option value="Success">Success</option>
+                <option value="Failure">Failure</option>
+              </select>
+              <Button type="submit" variant="outlined" sx={{ mt: 2 }}>
+                Update
+              </Button>
+            </Stack>
+          </Box>
+        </Grid>
         {/* <form onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor="name">name </label>
           <input
@@ -182,6 +237,16 @@ function ClientEdit(props) {
           <button>Update</button>
         </form> */}
       </Stack>
+      <Grid item xs={6}>
+        <Stack>
+          <Typography variant="h6" gutterBottom>
+            Add Products{" "}
+          </Typography>
+          <Paper style={{ maxHeight: 300, maxWidth: "50%", overflow: "auto" }}>
+            {productRender}
+          </Paper>
+        </Stack>
+      </Grid>
     </Grid>
   );
 }

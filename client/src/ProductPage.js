@@ -13,12 +13,12 @@ import {
   Button,
   CardContent,
   Card,
+  Paper,
 } from "@mui/material";
 
 function ProductPage(props) {
   const { register, handleSubmit, watch, reset, getValues } = useForm();
   const [SaleGroupList, setSaleGroupList] = useState("");
-  const [groupProducts, setGroupProducts] = useState("");
 
   useEffect(() => {
     async function getGroups() {
@@ -115,7 +115,7 @@ function ProductPage(props) {
       justifyContent="center"
       sx={{ minHeight: "100vh" }}
     >
-      <Typography variant="h3" gutterBottom>
+      <Typography variant="h4" gutterBottom>
         Hello from Product Page
       </Typography>
       <Box
@@ -197,7 +197,9 @@ function ProductPage(props) {
         <button>Submit</button>
       </form> */}
       <Typography variant="h6">View Group Products Here</Typography>
-      {productDisplay}
+      <Paper style={{ maxHeight: 300, overflow: "auto" }}>
+        {productDisplay}
+      </Paper>
     </Grid>
   );
 }

@@ -198,6 +198,7 @@ app.get("/product-page/:id", async (req, res) => {
   const findGroups = await SaleGroup.find({ ownerID: req.params.id }).populate(
     "Products"
   );
+
   res.json({ SaleGroupList: findGroups });
 });
 app.post("/create-new-product/:id", async (req, res) => {
