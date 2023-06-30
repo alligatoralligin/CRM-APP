@@ -355,6 +355,7 @@ app.post("/update-client/:id/:UserID", async (req, res) => {
         "Contacts.$.Notes": req.body.Notes,
         "Contacts.$.ContactStatus": req.body.ContactStatus,
         "Contacts.$.updatedAt": date,
+        "Contacts.$.clientProducts": [],
       },
     }
   );
@@ -372,6 +373,113 @@ app.post("/update-client-info:id", async (req, res) => {
   console.log(req.params.id);
 });
 
+app.post(
+  "/add-product-to-client/:clientID/:productID/:userID",
+  async (req, res) => {
+    const findContact = await Contact.findById(req.params.clientID);
+    const productAr = findContact.clientProducts;
+    if (productAr.some((e) => e.itemID === req.params.productID) === false) {
+      findContact.clientProducts.push(req.params.productID);
+      findContact.save();
+
+      // const updateContact = await Contact.updateOne(
+      //   {
+      //     id: `${req.params.clientID}`,
+      //   },
+      //   {
+      //     $push: {
+      //       "$.clientProducts": {
+      //         itemID: req.params.productID,
+      //         quantity: req.body.quantity,
+      //       },
+      //     },
+      //   }
+      // );
+      // console.log(updateContact);
+    } else {
+      console.log("already in array");
+    }
+
+    const findProduct = await Product.findById(req.params.productID);
+    // If amount sold is not a find in the product document,create the field and set the value to one
+    if (!findProduct.AmountSold) {
+      const addAmountSold = await Product.findOneAndUpdate(
+        {
+          _id: new mongoose.Types.ObjectId(req.params.productID),
+        },
+        { AmountSold: 1 }
+      );
+      console.log("add amount sold");
+      console.log(req.params.productID);
+      console.log(addAmountSold);
+    } else {
+      // if amount sold already existed then increment it by the quantity entered
+      const addtoAmountSold = await Product.findOneAndUpdate(
+        { _id: new mongoose.Types.ObjectId(req.params.productID) },
+        { $inc: { AmountSold: req.body.quantity } },
+        { new: true }
+      );
+    }
+
+    // ********
+    //Adding Product ID to Products Array
+
+    const findUser = await User.findOne(
+      {
+        "Contacts._id": new mongoose.Types.ObjectId(req.params.clientID),
+      },
+      { "Contacts.$": 1 }
+    );
+
+    const clientProductArr = findUser.Contacts[0].clientProducts;
+
+    //**If the clientProducts array does exist */
+    if (clientProductArr) {
+      //accessing the client product array stored in Users object to find if it already exists
+      if (clientProductArr.some((e) => e === req.params.productID) === false) {
+        console.log("already in array");
+      } else {
+        const updateUser = await User.updateOne(
+          {
+            id: `${req.params.userID}`,
+            "Contacts._id": new mongoose.Types.ObjectId(req.params.clientID),
+          },
+          {
+            $push: {
+              "Contacts.$.clientProducts": [req.params.productID],
+            },
+          }
+        );
+      }
+      // const inArray =
+      //   productAr.some((e) => e.itemID === req.params.productID) === false;
+
+      // console.log(req.params.clientID);
+      // console.log(req.params.productID);
+      // console.log(req.body);
+      console.log(findContact);
+
+      res.send("Reached add-product-to-client route");
+    }
+    //**If the clientProducts array does not exist */
+    else {
+      const newClientProductArray = await User.updateOne(
+        {
+          id: `${req.params.userID}`,
+          "Contacts._id": new mongoose.Types.ObjectId(req.params.clientID),
+        },
+        {
+          $set: {
+            "Contacts.$.clientProducts": [req.params.productID],
+          },
+        }
+      );
+      console.log(newClientProductArray);
+    }
+  }
+);
+
+//route to add a product to client's product array
 app.get("/dashboard/:UserID", async (req, res) => {
   //Counting all the documents in Contacts of group
   const groupById = await SaleGroup.find({

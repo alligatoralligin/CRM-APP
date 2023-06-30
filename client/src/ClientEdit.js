@@ -14,6 +14,7 @@ import {
   CardContent,
   Paper,
 } from "@mui/material";
+import AddProductComp from "./HelperComps/ProductFormComp";
 
 function ClientEdit(props) {
   const [clientData, setClientData] = useState("");
@@ -101,12 +102,14 @@ function ClientEdit(props) {
           <Typography variant="subtitle1">
             Product ID: {productList[product]._id}
           </Typography>
-          <Button variant="contained" color="info" sx={{ mr: 1 }}>
-            +
-          </Button>
-          <Button variant="contained" color="info">
-            -
-          </Button>
+          <Typography variant="subtitle1">
+            Amount Sold : {productList[product].AmountSold}
+          </Typography>
+          <AddProductComp
+            clientID={id}
+            productID={productList[product]._id}
+            userID={props.UserID}
+          ></AddProductComp>
         </CardContent>
       </Card>
     );

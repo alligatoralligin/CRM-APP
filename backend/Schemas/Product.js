@@ -8,7 +8,8 @@ const productSchema = new mongoose.Schema({
   Img: String,
   GroupID: String,
   SalesID: String,
-  SalesQuantity: Number,
+  AmountSold: Number,
+  Quantity: Number,
 });
 
 const Product = mongoose.model("Product", productSchema);
