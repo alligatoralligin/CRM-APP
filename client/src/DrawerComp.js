@@ -125,6 +125,9 @@ export default function MiniDrawer(props) {
   let DrawerIcons = [<InventoryIcon />];
 
   let LoginButtons;
+  let UserNavDisplay;
+  let AboutButtons;
+  // Middle buttons before login
 
   if (props.isLoggedIn) {
     LoginButtons = (
@@ -133,6 +136,15 @@ export default function MiniDrawer(props) {
           <Typography variant="h7">Logout</Typography>
         </Button>
       </NavLink>
+    );
+    UserNavDisplay = (
+      <span>
+        <PersonIcon></PersonIcon>
+        {/* Placeholder for User Image */}
+        <Typography variant="h7" sx={{ mr: 2 }}>
+          {props.Username}
+        </Typography>
+      </span>
     );
   }
   if (!props.isLoggedIn) {
@@ -149,6 +161,24 @@ export default function MiniDrawer(props) {
             <Typography variant="h7">Register </Typography>
           </Button>
         </NavLink>
+      </div>
+    );
+
+    AboutButtons = (
+      <div>
+        <Button variant="contained" color="primary" sx={{ mr: 10 }}>
+          <NavLink to="/About">About</NavLink>
+        </Button>
+
+        <Button variant="contained" color="primary" sx={{ mr: 10 }}>
+          <NavLink to="/Pricing">Pricing</NavLink>
+        </Button>
+        <Button variant="contained" color="primary" sx={{ mr: 10 }}>
+          Software
+        </Button>
+        <Button variant="contained" color="primary" sx={{ mr: 10 }}>
+          Features
+        </Button>
       </div>
     );
   }
@@ -175,13 +205,9 @@ export default function MiniDrawer(props) {
                 CRM-MERN
               </Typography>
             </Box>
-            <Box alignSelf={"flex-end"}>
-              {/* Placeholder for User Image */}
-              <PersonIcon></PersonIcon>
-              <Typography variant="h7" sx={{ mr: 2 }}>
-                {props.Username}
-              </Typography>
-
+            <Grid>{AboutButtons}</Grid>
+            <Box justifyContent alignSelf={"flex-end"}>
+              {UserNavDisplay}
               {LoginButtons}
             </Box>
           </Grid>

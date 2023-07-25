@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Button, Grid, Typography, Box, TextField, Stack } from "@mui/material";
 
 export default function LoginPage(props) {
@@ -36,45 +36,54 @@ export default function LoginPage(props) {
 
   watch(["Username", "Password"]);
   return (
-    <Grid
-      container
-      spacing={0}
-      direction="column"
-      alignItems="center"
-      justifyContent="center"
-      sx={{ minHeight: "100vh" }}
-    >
-      <Typography variant="h4" gutterBottom>
-        Login
-      </Typography>
-      <Box
-        component="form"
-        sx={{
-          "& .MuiTextField-root": { m: 1, width: "25ch" },
-        }}
-        noValidate
-        autoComplete="off"
-        onSubmit={handleSubmit(onSubmit)}
+    <Grid container width={5 / 5}>
+      <Grid
+        item
+        xs={6}
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        sx={{ minHeight: "100vh" }}
       >
-        <Stack spacing={2}>
-          <TextField
-            id="Username"
-            label="Username"
-            type="text"
-            {...register("Username", { required: true })}
-          />
-          <TextField
-            id="Password"
-            label="Password"
-            type="password"
-            {...register("Password", { required: true })}
-          />
-          <Button type="submit" variant="outlined" sx={{ mt: 2 }}>
-            Login
-          </Button>
-        </Stack>
-      </Box>
-      {/* <form onSubmit={handleSubmit(onSubmit)}>
+        <Typography variant="h4" gutterBottom>
+          Login
+        </Typography>
+        <Box
+          component="form"
+          sx={{
+            "& .MuiTextField-root": { m: 1, width: "25ch" },
+          }}
+          noValidate
+          autoComplete="off"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <Stack spacing={2}>
+            <TextField
+              id="Username"
+              label="Username"
+              type="text"
+              {...register("Username", { required: true })}
+            />
+            <TextField
+              id="Password"
+              label="Password"
+              type="password"
+              {...register("Password", { required: true })}
+            />
+            <Button type="submit" variant="outlined" sx={{ mt: 2 }}>
+              Login
+            </Button>
+            <Typography variant="subtitle">
+              Don't have an account? {<NavLink to="/Register">Sign Up</NavLink>}
+            </Typography>
+            <Typography variant="subtitle1">
+              <NavLink to={""}>Forgot Password?</NavLink>
+            </Typography>
+          </Stack>
+        </Box>
+        {/* <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="Username">
           <Typography variant="subtitle1">Username</Typography>
         </label>
@@ -95,6 +104,14 @@ export default function LoginPage(props) {
         <br></br>
     
       </form> */}
+      </Grid>
+      <Grid item xs={6}>
+        <Box
+          sx={{ height: "100%", width: "100" }}
+          component="img"
+          src="https://images.unsplash.com/photo-1684609557323-ccc9881e871e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80"
+        ></Box>
+      </Grid>
     </Grid>
   );
 }

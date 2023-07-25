@@ -12,6 +12,7 @@ import CircularPercent from "./DBComponents/CircularPercent";
 
 function Dashboard(props) {
   const [totalContactsInfo, setTotalContactsInfo] = useState("");
+  //totalContactsInfo is the count of Users in the SalesGroup
   const [clientPerUser, setClientPerUser] = useState("");
   const [chartData, setChartData] = useState("");
 
@@ -56,6 +57,7 @@ function Dashboard(props) {
     }
     getDashBoardInfo();
   }, []);
+
   let totalContacts = [];
 
   if (totalContactsInfo[0]) {
@@ -107,8 +109,8 @@ function Dashboard(props) {
           cardPercent="62"
         ></DashBoardCard>
         <DashBoardCard
-          cardTitle="Company Value"
-          cardStat="1,45"
+          cardTitle="Total SalesGroup Users"
+          cardStat={totalContacts}
           cardPercent="72"
         ></DashBoardCard>
         <DashBoardCard

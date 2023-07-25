@@ -8,6 +8,8 @@ import LoginPage from "./LoginPage";
 import RegisterPage from "./RegisterPage";
 import Navbar from "./Navbar";
 import HomePage from "./HomePage";
+import AboutPage from "./AboutPage";
+import PricingPage from "./PricingPage";
 import ProtectedRoute from "./ProtectedRoute";
 import Dashboard from "./Dashboard";
 import GroupCreatePage from "./GroupCreatePage";
@@ -82,6 +84,7 @@ function App() {
       ></Navbar> */}
 
       <Routes>
+        {/* Non protected rouites */}
         <Route path="/Home" element={<HomePage></HomePage>}></Route>
         <Route
           path="/ClientList/:id"
@@ -122,6 +125,27 @@ function App() {
             ></RegisterPage>
           }
         ></Route>
+        <Route
+          path="/About"
+          element={
+            <AboutPage
+              isLoggedIn={isLoggedIn}
+              handleLogout={handleLogout}
+              setIsLoggedIn={handleLogin}
+            ></AboutPage>
+          }
+        ></Route>
+        <Route
+          path="/Pricing"
+          element={
+            <PricingPage
+              isLoggedIn={isLoggedIn}
+              handleLogout={handleLogout}
+              setIsLoggedIn={handleLogin}
+            ></PricingPage>
+          }
+        ></Route>
+        {/* Protected routes */}
         <Route
           path="/Dashboard/:id"
           element={
