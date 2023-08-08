@@ -9,14 +9,52 @@ function DashBoardCard(props) {
     <div>
       <Card
         variant="outlined"
-        sx={{ boxShadow: 1, minWidth: 350, minHeight: 110, ml: 10 }}
+        sx={{
+          boxShadow: 1,
+          minWidth: 350,
+          minHeight: 110,
+          ml: 10,
+          borderRadius: "10px",
+          ":hover": {
+            boxShadow: 10,
+          },
+        }}
       >
         <CardContent>
-          <CircularProgressWithLabel value={props.cardPercent} />
-          <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
-            {props.cardTitle}
-          </Typography>
-          <Typography variant="subtitle1">{props.cardStat}</Typography>
+          {/* <CircularProgressWithLabel value={props.cardPercent} /> */}
+          <Grid container>
+            <Grid item xs={12}>
+              <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
+                {props.cardTitle}
+              </Typography>
+            </Grid>
+            <Grid item xs={8} minHeight={50}>
+              <Grid
+                container
+                spacing={0}
+                direction="column"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Grid item xs={4}>
+                  <Box component="img" src={props.icon}></Box>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={4}>
+              <Grid
+                container
+                spacing={0}
+                direction="column"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Typography sx={{ mt: 1.7 }} variant="subtitle1">
+                  {props.cardStat}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
         </CardContent>
       </Card>
       <br></br>

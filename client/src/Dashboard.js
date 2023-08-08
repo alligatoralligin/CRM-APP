@@ -6,9 +6,17 @@ import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js/auto";
 import { Data } from "./ChartData/Data";
 import BarChart from "./Charts/BarChart";
+import DoughnutChart from "./Charts/DoughnutChart";
 import { Box, Typography, Grid, Card, CardContent } from "@mui/material";
 import DashBoardCard from "./DBComponents/DashBoardCard";
 import CircularPercent from "./DBComponents/CircularPercent";
+import satisfied64 from "./Icons/satisfied64.png";
+import new64 from "./Icons/new64.png";
+import closing64 from "./Icons/closing64.png";
+import failure64 from "./Icons/failure64.png";
+import account64 from "./Icons/account64.png";
+import employees64 from "./Icons/employees64.png";
+import opportunity64 from "./Icons/opportunity64.png";
 
 function Dashboard(props) {
   const [totalContactsInfo, setTotalContactsInfo] = useState("");
@@ -16,6 +24,7 @@ function Dashboard(props) {
   const [clientPerUser, setClientPerUser] = useState("");
   const [chartData, setChartData] = useState("");
 
+  // Bar chart data
   useEffect(() => {
     if (clientPerUser) {
       setChartData({
@@ -38,6 +47,7 @@ function Dashboard(props) {
       });
     }
   }, [clientPerUser]);
+  //Doughnut Chart Data
 
   useEffect(() => {
     async function getDashBoardInfo() {
@@ -79,9 +89,57 @@ function Dashboard(props) {
   let BarChartRender;
   if (chartData) {
     BarChartRender = (
-      <BarChart chartData={chartData} headerInfo={"Client Per User "} />
+      <BarChart
+        chartData={chartData}
+        headerInfo={"Client Per User "}
+        chartTitle={"Client Total By Sales Rep"}
+      />
     );
   }
+  // Doughnut Chart Render
+  let DoughnutChartRender;
+  if (chartData) {
+    DoughnutChartRender = (
+      <DoughnutChart
+        chartData={chartData}
+        headerInfo={"Total Client Status "}
+        chartTitle={"Total Client Status"}
+      />
+    );
+  }
+
+  //Showing the total number of clients in the Success Status
+  console.log(clientPerUser);
+  let ContactArray = [];
+  for (let i = 0; i < clientPerUser.length; i++) {
+    for (let x = 0; x < clientPerUser[i].Contacts.length; x++) {
+      ContactArray.push(clientPerUser[i].Contacts[x]);
+    }
+  }
+  console.log(ContactArray);
+
+  const SuccessCount = ContactArray.filter(
+    (obj) => obj.ContactStatus === "Success"
+  ).length;
+  console.log(SuccessCount);
+
+  //Showing the total number of clients in the Failure Status
+  const FailureCount = ContactArray.filter(
+    (obj) => obj.ContactStatus === "Failure"
+  ).length;
+  console.log(FailureCount);
+
+  //Showing the total number of clients in the closing Status
+  const closingCount = ContactArray.filter(
+    (obj) => obj.ContactStatus === "closing"
+  ).length;
+  console.log(closingCount);
+
+  //Showing the total number of clients in the opportunity Status
+  const opportunityCount = ContactArray.filter(
+    (obj) => obj.ContactStatus === "opportunity"
+  ).length;
+  console.log(opportunityCount);
 
   return (
     <Grid
@@ -93,7 +151,7 @@ function Dashboard(props) {
       sx={{ minHeight: "100vh", mt: 10 }}
     >
       <Typography variant="h3" gutterBottom>
-        Dashboard
+        {window.localStorage.getItem("Username")}'s Dashboard
       </Typography>
 
       {/* Placeholder Dashboard Content */}
@@ -102,29 +160,30 @@ function Dashboard(props) {
           cardTitle="New Accounts"
           cardStat="153"
           cardPercent="58"
+          icon={new64}
         ></DashBoardCard>
         <DashBoardCard
-          cardTitle="Total Expenses"
-          cardStat="250"
+          cardTitle="Number of Satisfied Customers"
+          cardStat={SuccessCount}
           cardPercent="62"
+          icon={satisfied64}
         ></DashBoardCard>
         <DashBoardCard
           cardTitle="Total SalesGroup Users"
           cardStat={totalContacts}
           cardPercent="72"
+          icon={account64}
         ></DashBoardCard>
         <DashBoardCard
           cardTitle="New Employees"
           cardStat="+34"
           cardPercent="81"
+          icon={employees64}
         ></DashBoardCard>
       </Box>
       <Box className="middleChartRow" sx={{ display: "flex", mt: 10 }}>
         <Card variant="outlined" sx={{ boxShadow: 1, mr: 10 }}>
           <CardContent>
-            <Typography variant="h5" gutterBottom>
-              Sales Total By Sales Rep
-            </Typography>
             <div
               class="chart-container"
               style={{ height: "400px", width: "700px" }}
@@ -133,23 +192,28 @@ function Dashboard(props) {
             </div>
           </CardContent>
         </Card>
-        <CircularPercent title="Income" percent="75"></CircularPercent>
+        <Card variant="outlined" sx={{ boxShadow: 1, mr: 10 }}>
+          <CardContent>{DoughnutChartRender}</CardContent>
+        </Card>
       </Box>
       <Box className="cardRowBottom" sx={{ display: "flex", mt: 10 }}>
         <DashBoardCard
-          cardTitle="Income"
-          cardStat="153"
+          cardTitle="Total Customers at the Failure Status"
+          cardStat={FailureCount}
+          icon={failure64}
           cardPercent="58"
         ></DashBoardCard>
         <DashBoardCard
-          cardTitle="Expenses"
-          cardStat="250"
+          cardTitle="Total Customers at the Closing Status"
+          cardStat={closingCount}
           cardPercent="62"
+          icon={closing64}
         ></DashBoardCard>
         <DashBoardCard
-          cardTitle="Spending"
-          cardStat="1,45"
+          cardTitle="Total Potential Customers"
+          cardStat={opportunityCount}
           cardPercent="72"
+          icon={opportunity64}
         ></DashBoardCard>
         <DashBoardCard
           cardTitle="Totals"

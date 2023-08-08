@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { Controller } from "react-hook-form";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import EnhancedTable from "./HelperComps/ClientPageTable";
+
 import {
   Box,
   FormControl,
@@ -78,69 +80,75 @@ function ClientPage(props) {
 
   let selectOptions = [];
 
-  for (let i = 0; i < dataArray.length; i++) {
-    ShowPageContent.push(
-      <Grid item xs={8}>
-        <Card
-          variant="outlined"
-          sx={{ minWidth: "700px", mt: 3, boxShadow: 1 }}
-        >
-          <CardContent align="center">
-            <Typography variant="subtitle1" style={{ wordWrap: "break-word" }}>
-              Name:{dataArray[i].name}
-            </Typography>
-            <Typography variant="subtitle1" style={{ wordWrap: "break-word" }}>
-              Title:{dataArray[i].title}
-            </Typography>
-            <Typography variant="subtitle1" style={{ wordWrap: "break-word" }}>
-              Email:{dataArray[i].Email}
-            </Typography>
-            <Typography variant="subtitle1">
-              phoneNumber:{dataArray[i].phoneNumber}
-            </Typography>
-            <Typography variant="subtitle1" style={{ wordWrap: "break-word" }}>
-              Source:{dataArray[i].Source}
-            </Typography>
-            <Typography variant="subtitle1">
-              Notes:{dataArray[i].Notes}
-            </Typography>
-            <Typography variant="subtitle1">
-              Contact Status: {dataArray[i].ContactStatus}
-            </Typography>
-            <Typography variant="subtitle1">
-              Date Created:{dataArray[i].createdAt}
-            </Typography>
-            <Typography variant="subtitle1">
-              Last Updated:{dataArray[i].updatedAt}
-            </Typography>
-            {/* <p>Name:{dataArray[i].name}</p> 
-         <p>Title:{dataArray[i].title}</p>
-        <p>Email:{dataArray[i].Email}</p>
-        <p>Phone number:{dataArray[i].phoneNumber}</p>
-        <p>Source:{dataArray[i].Source}</p>
-        <p>Notes:{dataArray[i].Notes}</p> */}
+  // Card Variant of Client Page information Display
+  //***************************************** */
+  // for (let i = 0; i < dataArray.length; i++) {
+  //   ShowPageContent.push(
+  //     <Grid item xs={8}>
+  //       <Card
+  //         variant="outlined"
+  //         sx={{ minWidth: "700px", mt: 3, boxShadow: 1 }}
+  //       >
+  //         <CardContent align="center">
+  //           <Typography variant="subtitle1" style={{ wordWrap: "break-word" }}>
+  //             Name:{dataArray[i].name}
+  //           </Typography>
+  //           <Typography variant="subtitle1" style={{ wordWrap: "break-word" }}>
+  //             Title:{dataArray[i].title}
+  //           </Typography>
+  //           <Typography variant="subtitle1" style={{ wordWrap: "break-word" }}>
+  //             Email:{dataArray[i].Email}
+  //           </Typography>
+  //           <Typography variant="subtitle1">
+  //             phoneNumber:{dataArray[i].phoneNumber}
+  //           </Typography>
+  //           <Typography variant="subtitle1" style={{ wordWrap: "break-word" }}>
+  //             Source:{dataArray[i].Source}
+  //           </Typography>
+  //           <Typography variant="subtitle1">
+  //             Notes:{dataArray[i].Notes}
+  //           </Typography>
+  //           <Typography variant="subtitle1">
+  //             Contact Status: {dataArray[i].ContactStatus}
+  //           </Typography>
+  //           <Typography variant="subtitle1">
+  //             Date Created:{dataArray[i].createdAt}
+  //           </Typography>
+  //           <Typography variant="subtitle1">
+  //             Last Updated:{dataArray[i].updatedAt}
+  //           </Typography>
+  //           {/* <p>Name:{dataArray[i].name}</p>
+  //        <p>Title:{dataArray[i].title}</p>
+  //       <p>Email:{dataArray[i].Email}</p>
+  //       <p>Phone number:{dataArray[i].phoneNumber}</p>
+  //       <p>Source:{dataArray[i].Source}</p>
+  //       <p>Notes:{dataArray[i].Notes}</p> */}
 
-            <Link to={`/Client/Edit/${dataArray[i]._id}`}>
-              <Button variant="contained">Edit</Button>
-            </Link>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => deleteReq(dataArray[i]._id)}
-            >
-              Delete
-            </Button>
+  //           <Link to={`/Client/Edit/${dataArray[i]._id}`}>
+  //             <Button variant="contained">Edit</Button>
+  //           </Link>
+  //           <Button
+  //             variant="contained"
+  //             color="error"
+  //             onClick={() => deleteReq(dataArray[i]._id)}
+  //           >
+  //             Delete
+  //           </Button>
 
-            <Button variant="contained" color="secondary">
-              Notes
-            </Button>
-            <br></br>
-          </CardContent>
-        </Card>
-      </Grid>
-    );
+  //           <Button variant="contained" color="secondary">
+  //             Notes
+  //           </Button>
+  //           <br></br>
+  //         </CardContent>
+  //       </Card>
+  //     </Grid>
+  //   );
+  // }
+  // *****************************
+  const ShowDataTable = [];
+  if (dataArray[0]) {
+    ShowDataTable.push(<EnhancedTable dataArray={dataArray} />);
   }
-
   if (groupInfo) {
     for (const group in groupInfo) {
       selectOptions.push(
@@ -246,6 +254,7 @@ function ClientPage(props) {
             </CardContent>
           </Card>
           {ShowPageContent}
+          {ShowDataTable}
         </Grid>
         <Grid
           container

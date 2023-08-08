@@ -1,7 +1,8 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, Box, Paper, Button } from "@mui/material";
+import TextField from "@mui/material/TextField";
 
 function GroupCreatePage(props) {
   const { register, handleSubmit, watch, reset } = useForm();
@@ -25,20 +26,46 @@ function GroupCreatePage(props) {
       direction="column"
       alignItems="center"
       justifyContent="center"
-      sx={{ minHeight: "100vh" }}
+      sx={{
+        minHeight: "100vh",
+        backgroundImage: `url(${"https://images.unsplash.com/photo-1689702095123-a20606125fd5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1972&q=80"})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+      }}
     >
-      <Typography variant="h3" gutterBottom>
-        Hello from GroupCreatePage
-      </Typography>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="groupName">Enter Group Name here</label>
-        <input
-          type="text"
-          id="groupName"
-          {...register("groupname", { required: true })}
-        ></input>
-        <button>Submit</button>
-      </form>
+      <Box
+        display="grid"
+        spacing={0}
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        sx={{
+          backgroundColor: "rgba(0, 0, 0, 0.15)",
+          minHeight: "500px",
+          minWidth: "400px",
+        }}
+      >
+        <Typography
+          fontSize={20}
+          sx={{ color: "black", opacity: "1", padding: "0" }}
+        >
+          Create a new Sales Group
+        </Typography>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextField
+            id="groupName"
+            type="text"
+            label="Enter Group Name Here"
+            variant="outlined"
+            sx={{ display: "block", mb: 2 }}
+            {...register("groupname", { required: true })}
+          />
+
+          <Button variant="contained" sx={{ mb: 2 }}>
+            Submit
+          </Button>
+        </form>
+      </Box>
     </Grid>
   );
 }

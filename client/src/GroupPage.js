@@ -65,7 +65,10 @@ function GroupPage(props) {
   if (GroupData) {
     for (const group in GroupData) {
       let userList = GroupData[group].Users;
-      groupMemberRender.push(<h3>{GroupData[group].name}</h3>);
+      groupMemberRender.push(
+        <Typography variant="h4">{GroupData[group].name}</Typography>
+      );
+      groupMemberRender.push(<h3> Group Members</h3>);
       for (let i = 0; i < userList.length; i++) {
         groupMemberRender.push(
           <Card variant="outlined" sx={{ minWidth: "350px", marginBottom: 2 }}>
@@ -116,8 +119,9 @@ function GroupPage(props) {
       justifyContent="center"
       sx={{ minHeight: "100vh" }}
     >
-      <Typography variant="h3">Sale Group Page</Typography>
       <h2>{GroupData.name}</h2>
+
+      {groupMemberRender}
       <Typography variant="h6">Add a member to {GroupData.name}</Typography>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -135,8 +139,6 @@ function GroupPage(props) {
         <br></br>
         <button>Submit</button>
       </form>
-      <Typography variant="h4"> Group Members</Typography>
-      {groupMemberRender}
     </Grid>
   );
 }
