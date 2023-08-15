@@ -3,8 +3,16 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { CardContent, Grid, Typography, Card, Button } from "@mui/material";
+import {
+  Box,
+  CardContent,
+  Grid,
+  Typography,
+  Card,
+  Button,
+} from "@mui/material";
 import GroupRemoveIcon from "@mui/icons-material/GroupRemove";
+import user128 from "./Icons/user128.png";
 
 function GroupPage(props) {
   const [GroupData, setGroupData] = useState("");
@@ -73,26 +81,37 @@ function GroupPage(props) {
         groupMemberRender.push(
           <Card variant="outlined" sx={{ minWidth: "350px", marginBottom: 2 }}>
             <CardContent>
-              <div>
-                <Typography variant="subtitle1">
-                  Username:{userList[i].username}
-                </Typography>
-                <Typography variant="subtitle1">
-                  Email:{userList[i].Email}
-                </Typography>
-                <Typography variant="subtitle1">
-                  Group:{userList[i].Group}
-                </Typography>
+              <Grid container>
+                <Grid item xs={4}>
+                  <Box
+                    component="img"
+                    src={user128}
+                    sx={{ height: "75%", width: "75%", marginTop: 2 }}
+                  ></Box>
+                </Grid>
+                <Grid item xs={8}>
+                  <div>
+                    <Typography variant="subtitle1">
+                      Username:{userList[i].username}
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      Email:{userList[i].Email}
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      Group:{userList[i].Group}
+                    </Typography>
 
-                <Button
-                  variant="outlined"
-                  onClick={() =>
-                    removefromGroup(GroupData[group]._id, userList[i]._id)
-                  }
-                >
-                  <GroupRemoveIcon />
-                </Button>
-              </div>
+                    <Button
+                      variant="outlined"
+                      onClick={() =>
+                        removefromGroup(GroupData[group]._id, userList[i]._id)
+                      }
+                    >
+                      <GroupRemoveIcon />
+                    </Button>
+                  </div>
+                </Grid>
+              </Grid>
             </CardContent>
           </Card>
         );

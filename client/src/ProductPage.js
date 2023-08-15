@@ -70,10 +70,14 @@ function ProductPage(props) {
   let productDisplay = [];
   if (SaleGroupList) {
     for (const group in SaleGroupList) {
-      productDisplay.push(<p>{SaleGroupList[group].name}</p>);
+      productDisplay.push(
+        <Typography variant="subtitle1" sx={{ textAlign: "center" }}>
+          {SaleGroupList[group].name}
+        </Typography>
+      );
       for (const item in SaleGroupList[group].Products) {
         productDisplay.push(
-          <Card variant="outlined" sx={{ p: 2 }}>
+          <Card variant="outlined" sx={{ p: 2, mb: 3 }}>
             <CardContent>
               Product Name:{SaleGroupList[group].Products[item].name} <br></br>
               Price:
@@ -115,54 +119,78 @@ function ProductPage(props) {
       justifyContent="center"
       sx={{ minHeight: "100vh" }}
     >
-      <Typography variant="h4" gutterBottom>
-        Hello from Product Page
+      <Typography variant="h4" sx={{ marginBottom: 10 }}>
+        Add Products to Your Sales Group
       </Typography>
-      <Box
-        component="form"
-        sx={{
-          "& .MuiTextField-root": { m: 1, width: "25ch" },
-        }}
-        noValidate
-        autoComplete="off"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <Stack spacing={2}>
-          <TextField
-            id="name"
-            label="name"
-            type="text"
-            {...register("name", { required: true })}
-          />
-          <TextField
-            id="price"
-            label="price"
-            type="number"
-            {...register("price", { required: true })}
-          />
-          <TextField
-            id="Img"
-            label="Image Link"
-            type="text"
-            {...register("Img", { required: false })}
-          />
-          <select {...register("GroupName", { required: true })}>
-            {selectOptions}
-          </select>
-          <TextField
-            id="description"
-            label="description"
-            type="text"
-            multiline
-            rows={4}
-            {...register("description", { required: false })}
-          />
-          <Button type="submit" variant="outlined" sx={{ mt: 2 }}>
-            Submit
-          </Button>
-        </Stack>
-      </Box>
-      {/* <form onSubmit={handleSubmit(onSubmit)}>
+      <Grid container spacing={0}>
+        <Grid
+          container
+          spacing={0}
+          direction="column"
+          alignItems="flex-end"
+          xs={6}
+          sx={{ minHeight: "600px" }}
+        >
+          <Box
+            component="form"
+            sx={{
+              "& .MuiTextField-root": { m: 1, width: "25ch" },
+              minHeight: "600px",
+              minWidth: "400px",
+              border: 1,
+              borderRadius: "2%",
+              paddingLeft: 5,
+              paddingRight: 5,
+              marginRight: 3,
+            }}
+            noValidate
+            autoComplete="off"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <Typography variant="h6" sx={{ marginTop: 10 }}>
+              Add New Group Products Here
+            </Typography>
+            <Stack spacing={2}>
+              <TextField
+                id="name"
+                label="name"
+                type="text"
+                {...register("name", { required: true })}
+              />
+              <TextField
+                id="price"
+                label="price"
+                type="number"
+                {...register("price", { required: true })}
+              />
+              <TextField
+                id="Img"
+                label="Image Link"
+                type="text"
+                {...register("Img", { required: false })}
+              />
+              <select {...register("GroupName", { required: true })}>
+                {selectOptions}
+              </select>
+              <TextField
+                id="description"
+                label="description"
+                type="text"
+                multiline
+                rows={4}
+                {...register("description", { required: false })}
+              />
+              <Button
+                type="submit"
+                variant="outlined"
+                sx={{ mt: 1, maxWidth: "25ch" }}
+              >
+                Submit
+              </Button>
+            </Stack>
+          </Box>
+        </Grid>
+        {/* <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="name">name </label>
         <input
           type="text"
@@ -196,10 +224,25 @@ function ProductPage(props) {
         <br></br>
         <button>Submit</button>
       </form> */}
-      <Typography variant="h6">View Group Products Here</Typography>
-      <Paper style={{ maxHeight: 300, overflow: "auto" }}>
-        {productDisplay}
-      </Paper>
+        <Grid container xs={6}>
+          <Box
+            sx={{
+              border: 1,
+              borderRadius: "2%",
+              maxWidth: 500,
+              paddingRight: 5,
+              paddingLeft: 5,
+            }}
+          >
+            <Typography variant="h6" sx={{ marginTop: 10 }}>
+              View Group Products Here
+            </Typography>
+            <Paper style={{ maxHeight: 500, maxWidth: 500, overflow: "auto" }}>
+              {productDisplay}
+            </Paper>
+          </Box>
+        </Grid>
+      </Grid>
     </Grid>
   );
 }

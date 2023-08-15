@@ -41,7 +41,7 @@ function GroupCreatePage(props) {
         alignItems="center"
         sx={{
           backgroundColor: "rgba(0, 0, 0, 0.15)",
-          minHeight: "500px",
+          minHeight: "275px",
           minWidth: "400px",
         }}
       >

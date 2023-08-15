@@ -23,6 +23,7 @@ function Dashboard(props) {
   //totalContactsInfo is the count of Users in the SalesGroup
   const [clientPerUser, setClientPerUser] = useState("");
   const [chartData, setChartData] = useState("");
+  // chartData2 is for doughnut chart
 
   // Bar chart data
   useEffect(() => {
@@ -47,7 +48,6 @@ function Dashboard(props) {
       });
     }
   }, [clientPerUser]);
-  //Doughnut Chart Data
 
   useEffect(() => {
     async function getDashBoardInfo() {
@@ -96,20 +96,9 @@ function Dashboard(props) {
       />
     );
   }
-  // Doughnut Chart Render
-  let DoughnutChartRender;
-  if (chartData) {
-    DoughnutChartRender = (
-      <DoughnutChart
-        chartData={chartData}
-        headerInfo={"Total Client Status "}
-        chartTitle={"Total Client Status"}
-      />
-    );
-  }
 
   //Showing the total number of clients in the Success Status
-  console.log(clientPerUser);
+
   let ContactArray = [];
   for (let i = 0; i < clientPerUser.length; i++) {
     for (let x = 0; x < clientPerUser[i].Contacts.length; x++) {
@@ -140,6 +129,73 @@ function Dashboard(props) {
     (obj) => obj.ContactStatus === "opportunity"
   ).length;
   console.log(opportunityCount);
+
+  //Showing the total number of clients in the contacting count
+
+  const contactingCount = ContactArray.filter(
+    (obj) => obj.ContactStatus === "contacting"
+  ).length;
+
+  //Showing the total number of clients in the engaging count
+  const engagingCount = ContactArray.filter(
+    (obj) => obj.ContactStatus === "engaging"
+  ).length;
+  //Showing the total number of clients in the engaging count
+  const qualifiedCount = ContactArray.filter(
+    (obj) => obj.ContactStatus === "qualified"
+  ).length;
+
+  let chartData2;
+  if (ContactArray) {
+    chartData2 = {
+      labels: [
+        "New Opportunity",
+        "Qualified",
+        "Contacting",
+        "Engaging",
+        "Success",
+        "Failure",
+        "Closing",
+      ],
+      datasets: [
+        {
+          label: "Total Client Status",
+          data: [
+            opportunityCount,
+            qualifiedCount,
+            contactingCount,
+            engagingCount,
+            SuccessCount,
+            FailureCount,
+            closingCount,
+          ],
+        },
+      ],
+      backgroundColor: [
+        "rgba(75,192,192,1)",
+        "&quot;#ecf0f1",
+        "#50AF95",
+        "#f3ba2f",
+        "#2a71d0",
+        "rgba(39, 76, 245, 0.8)",
+        "rgba(39, 192, 245, 0.8)",
+        "rgba(140, 105, 245, 0.8)",
+      ],
+      borderColor: "black",
+      borderWidth: 2,
+    };
+  }
+  // Doughnut Chart Render
+  let DoughnutChartRender;
+  if (chartData2) {
+    DoughnutChartRender = (
+      <DoughnutChart
+        chartData={chartData2}
+        headerInfo={"Total Client Status "}
+        chartTitle={"Total Client Status"}
+      />
+    );
+  }
 
   return (
     <Grid

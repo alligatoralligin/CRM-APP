@@ -119,18 +119,24 @@ function ClientEdit(props) {
     <Grid
       container
       spacing={0}
-      // direction="column"
+      direction="column"
       alignItems="center"
       justifyContent="center"
       sx={{ minHeight: "100vh" }}
     >
-      <Stack sx={{ mt: 10 }}>
-        <h1>Hello from ClientEdit</h1>
-        <h5>{id}</h5>
-        <Typography variant="h5" gutterBottom>
-          Update Client
-        </Typography>
-        <Grid item xs={6}>
+      <Typography variant="h3" gutterBottom>
+        Update Client
+      </Typography>
+      <h5>{id}</h5>
+      <Grid container spacing={0}>
+        <Grid
+          container
+          spacing={0}
+          direction="column"
+          alignItems="flex-end"
+          xs={6}
+          sx={{ minHeight: "600px" }}
+        >
           <Box
             component="form"
             sx={{
@@ -239,16 +245,19 @@ function ClientEdit(props) {
           <br></br>
           <button>Update</button>
         </form> */}
-      </Stack>
-      <Grid item xs={6}>
-        <Stack>
-          <Typography variant="h6" gutterBottom>
-            Add Products{" "}
-          </Typography>
-          <Paper style={{ maxHeight: 300, maxWidth: "50%", overflow: "auto" }}>
-            {productRender}
-          </Paper>
-        </Stack>
+
+        <Grid container xs={6}>
+          <Box sx={{ marginLeft: 5 }}>
+            <Typography variant="h6" gutterBottom>
+              Add Products
+            </Typography>
+            <Paper
+              style={{ maxHeight: 300, minWidth: "50%", overflow: "auto" }}
+            >
+              {productRender}
+            </Paper>
+          </Box>
+        </Grid>
       </Grid>
     </Grid>
   );

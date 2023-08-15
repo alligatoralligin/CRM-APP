@@ -20,6 +20,7 @@ import ProductEdit from "./ProductEdit";
 import theme from "./Themes/Theme";
 import { ThemeProvider } from "@mui/material/styles";
 import MiniDrawer from "./DrawerComp";
+import FeaturesPage from "./FeaturesPage";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -133,6 +134,16 @@ function App() {
               handleLogout={handleLogout}
               setIsLoggedIn={handleLogin}
             ></AboutPage>
+          }
+        ></Route>
+        <Route
+          path="/Features"
+          element={
+            <FeaturesPage>
+              isLoggedIn={isLoggedIn}
+              handleLogout={handleLogout}
+              setIsLoggedIn={handleLogin}
+            </FeaturesPage>
           }
         ></Route>
         <Route
