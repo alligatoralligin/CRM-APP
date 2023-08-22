@@ -1,9 +1,9 @@
 import React from "react";
 import { Typography, Grid } from "@mui/material";
-import ActionAreaCard from "./HelperComps/ActionAreaCard";
-import ClientPageScreenshot from "./Images/ClientPageScreenshot.png";
-import DashboardScreenshot from "./Images/DashboardScreenshot.png";
-import AddProductPageScreenshot from "./Images/AddProductPageScreenshot.png";
+import ActionAreaCard from "../HelperComps/ActionAreaCard";
+import ClientPageScreenshot from "../Images/ClientPageScreenshot.png";
+import DashboardScreenshot from "../Images/DashboardScreenshot.png";
+import AddProductPageScreenshot from "../Images/AddProductPageScreenshot.png";
 
 function FeaturesPage() {
   return (
@@ -11,7 +11,10 @@ function FeaturesPage() {
       container
       direction="column"
       alignItems="center"
-      sx={{ height: "100vh" }}
+      sx={{
+        height: "100vh",
+        background: "linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%)",
+      }}
     >
       <Typography variant="h2" mt={20} gutterBottom mb={10}>
         Features

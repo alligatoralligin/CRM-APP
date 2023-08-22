@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { Controller } from "react-hook-form";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import EnhancedTable from "./HelperComps/ClientPageTable";
+import EnhancedTable from "../../HelperComps/ClientPageTable";
 
 import {
   Box,
@@ -155,7 +155,9 @@ function ClientPage(props) {
         // <MenuItem value={groupInfo[group._id]}>
         //   {groupInfo[group].name}
         // </MenuItem>
-        <option value={groupInfo[group]._id}>{groupInfo[group].name}</option>
+        <MenuItem value={groupInfo[group]._id}>
+          {groupInfo[group].name}
+        </MenuItem>
       );
     }
   }
@@ -169,7 +171,7 @@ function ClientPage(props) {
           direction="column"
           alignItems="center"
           justify="center"
-          style={{ minHeight: "100vh" }}
+          style={{ minHeight: "100vh", backgroundColor: "ghostwhite" }}
         >
           <Typography variant="h3" sx={{ mt: 10 }} gutterBottom>
             Client Page
@@ -230,26 +232,55 @@ function ClientPage(props) {
               </Box>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <br></br>
-                <label htmlFor="GroupName">GroupName</label>
-                <select {...register("GroupName", { required: true })}>
+                <Typography variant="subtitle1" gutterBottom>
+                  Group Name
+                </Typography>
+                {/* <select {...register("GroupName", { required: true })}>
                   {selectOptions}
-                </select>
+                </select> */}
+                <TextField
+                  select
+                  fullWidth
+                  label="Select"
+                  defaultValue=""
+                  inputProps={register("GroupName", {
+                    required: "Please seleect group",
+                  })}
+                >
+                  {selectOptions}
+                </TextField>
                 {/* Need to change group select to Material UI */}
-                <br></br>
-                <label htmlFor="ContactStatus">Contact Status</label>
-                <select {...register("ContactStatus", { required: true })}>
-                  <option value="opportunity">New Opportunity</option>
-                  <option value="contacting">Contacting</option>
-                  <option value="engaging">Engaging</option>
-                  <option value="qualified">Qualified</option>
+
+                <Typography variant="subtitle1" gutterBottom>
+                  Contact Status
+                </Typography>
+                <TextField
+                  select
+                  fullWidth
+                  label="Select"
+                  defaultValue={"default"}
+                  sx={{ marginBottom: 2 }}
+                  inputProps={register("ContactStatus", {
+                    required: "Please select contact status ",
+                  })}
+                >
+                  <MenuItem value="default" disabled>
+                    Choose a Contact Status
+                  </MenuItem>
+                  <MenuItem value="opportunity">New Opportunity</MenuItem>
+                  <MenuItem value="contacting">Contacting</MenuItem>
+                  <MenuItem value="engaging">Engaging</MenuItem>
+                  <MenuItem value="qualified">Qualified</MenuItem>
                   {/* custom stages is different for each company will try to make this step customizable later. Place holder atm */}
-                  <option value="customStages">Custom stages</option>
-                  <option value="closing">Closing</option>
-                  <option value="Success">Success</option>
-                  <option value="Failure">Failure</option>
-                </select>
-                <br></br>
-                <button>Submit</button>
+                  <MenuItem value="customStages">Custom stages</MenuItem>
+                  <MenuItem value="closing">Closing</MenuItem>
+                  <MenuItem value="Success">Success</MenuItem>
+                  <MenuItem value="Failure">Failure</MenuItem>
+                </TextField>
+
+                <Button variant="contained" type="submit">
+                  Submit
+                </Button>
               </form>
             </CardContent>
           </Card>

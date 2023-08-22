@@ -4,19 +4,19 @@ import React, { useEffect, useState } from "react";
 //Chart.js imports
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js/auto";
-import { Data } from "./ChartData/Data";
-import BarChart from "./Charts/BarChart";
-import DoughnutChart from "./Charts/DoughnutChart";
+import { Data } from "../ChartData/Data";
+import BarChart from "../Charts/BarChart";
+import DoughnutChart from "../Charts/DoughnutChart";
 import { Box, Typography, Grid, Card, CardContent } from "@mui/material";
-import DashBoardCard from "./DBComponents/DashBoardCard";
-import CircularPercent from "./DBComponents/CircularPercent";
-import satisfied64 from "./Icons/satisfied64.png";
-import new64 from "./Icons/new64.png";
-import closing64 from "./Icons/closing64.png";
-import failure64 from "./Icons/failure64.png";
-import account64 from "./Icons/account64.png";
-import employees64 from "./Icons/employees64.png";
-import opportunity64 from "./Icons/opportunity64.png";
+import DashBoardCard from "../DBComponents/DashBoardCard";
+import CircularPercent from "../DBComponents/CircularPercent";
+import satisfied64 from "../Icons/satisfied64.png";
+import new64 from "../Icons/new64.png";
+import closing64 from "../Icons/closing64.png";
+import failure64 from "../Icons/failure64.png";
+import account64 from "../Icons/account64.png";
+import employees64 from "../Icons/employees64.png";
+import opportunity64 from "../Icons/opportunity64.png";
 
 function Dashboard(props) {
   const [totalContactsInfo, setTotalContactsInfo] = useState("");
@@ -204,7 +204,7 @@ function Dashboard(props) {
       direction="column"
       alignItems="center"
       justifyContent="center"
-      sx={{ minHeight: "100vh", mt: 10 }}
+      sx={{ minHeight: "100vh", mt: 10, backgroundColor: "ghostwhite" }}
     >
       <Typography variant="h3" gutterBottom>
         {window.localStorage.getItem("Username")}'s Dashboard

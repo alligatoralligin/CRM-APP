@@ -10,9 +10,11 @@ import {
   Typography,
   Card,
   Button,
+  TextField,
+  MenuItem,
 } from "@mui/material";
 import GroupRemoveIcon from "@mui/icons-material/GroupRemove";
-import user128 from "./Icons/user128.png";
+import user128 from "C:/Users/Alex/CRM-MERN/client/src/Icons/user128.png";
 
 function GroupPage(props) {
   const [GroupData, setGroupData] = useState("");
@@ -122,7 +124,9 @@ function GroupPage(props) {
   if (GroupData) {
     for (const group in GroupData) {
       selectOptions.push(
-        <option value={GroupData[group]._id}>{GroupData[group].name}</option>
+        <MenuItem value={GroupData[group]._id}>
+          {GroupData[group].name}
+        </MenuItem>
       );
     }
   }
@@ -136,27 +140,38 @@ function GroupPage(props) {
       direction="column"
       alignItems="center"
       justifyContent="center"
-      sx={{ minHeight: "100vh" }}
+      sx={{ minHeight: "100vh", backgroundColor: "ghostwhite" }}
     >
       <h2>{GroupData.name}</h2>
 
       {groupMemberRender}
       <Typography variant="h6">Add a member to {GroupData.name}</Typography>
 
+      <label htmlFor="GroupName">GroupName</label>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="GroupName">GroupName</label>
-        <select {...register("GroupName", { required: true })}>
+        <TextField
+          select
+          fullWidth
+          label="Select"
+          defaultValue=""
+          sx={{ mb: 2 }}
+          inputProps={register("GroupName", {
+            required: "Please seleect group",
+          })}
+        >
           {selectOptions}
-        </select>
-        <br></br>
-        <label htmlFor="Email">Email </label>
-        <input
-          type="Email"
+        </TextField>
+
+        <TextField
           id="Email"
+          label="Email"
+          type="Email"
+          sx={{ mb: 2 }}
           {...register("Email", { required: true })}
-        ></input>
+        />
+
         <br></br>
-        <button>Submit</button>
+        <Button variant="contained">Submit</Button>
       </form>
     </Grid>
   );

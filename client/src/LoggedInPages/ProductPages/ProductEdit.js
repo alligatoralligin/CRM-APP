@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { Grid, Typography, TextField, Box, Button } from "@mui/material";
 
 function ProductEdit(props) {
   const [productData, setProductData] = useState("");
@@ -53,40 +54,63 @@ function ProductEdit(props) {
 
   console.log(watch(["name", "price", "Img", "description"]));
   return (
-    <div>
-      <h1>Hello from ProductEdit</h1>
-      <h5>{productID}</h5>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="name">name </label>
-        <input
-          type="text"
-          id="name"
-          {...register("name", { required: true })}
-        ></input>
-        <br></br>
-        <label htmlFor="price">price </label>
-        <input type="number" id="price" {...register("price")}></input>
-        <br></br>
-        <label htmlFor="description">Product description </label>
-        <br></br>
-        <textarea
-          type="text"
-          id="description"
-          rows={4}
-          cols={50}
-          {...register("description")}
-        ></textarea>
-        <br></br>
-        <label htmlFor="Img">Image </label>
-        <input
-          type="text"
-          id="Image"
-          {...register("Img", { required: false })}
-        ></input>
-        <br></br>
-        <button>Update</button>
-      </form>
-    </div>
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      sx={{ minHeight: "100vh", backgroundColor: "ghostwhite" }}
+    >
+      <Box
+        component="form"
+        sx={{
+          "& .MuiTextField-root": { m: 1, width: "25ch" },
+          backgroundColor: "white",
+          padding: "60px",
+        }}
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div>
+          <Typography variant="h4" gutterBottom>
+            Edit Product
+          </Typography>
+          <h5>Product ID:{productID}</h5>
+          <TextField
+            id="name"
+            label="name"
+            type="text"
+            {...register("name", { required: true })}
+          />
+          <TextField
+            id="price"
+            label="price"
+            type="number"
+            {...register("price", { required: true })}
+          />
+          <TextField
+            id="description"
+            label="description"
+            type="number"
+            multiline
+            rows={4}
+            {...register("description", { required: true })}
+          />
+          <br></br>
+          <TextField
+            id="Img"
+            label="Img"
+            type="text"
+            {...register("Notes", { required: false })}
+          />
+        </div>
+        <Button variant="contained" type="submit">
+          Submit
+        </Button>
+      </Box>
+    </Grid>
   );
 }
 

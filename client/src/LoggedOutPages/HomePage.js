@@ -6,11 +6,16 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { palette } from "@mui/system";
-import ActionAreaCard from "./HelperComps/ActionAreaCard";
+import ActionAreaCard from "../HelperComps/ActionAreaCard";
 
 export default function HomePage() {
   return (
-    <Grid sx={{ overflowX: "hidden" }}>
+    <Grid
+      sx={{
+        overflowX: "hidden",
+        background: "linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%)",
+      }}
+    >
       <Grid
         container
         spacing={0}
@@ -147,14 +152,15 @@ export default function HomePage() {
             id="panel1a-header"
           >
             <Typography sx={{ fontWeight: "bold" }}>
-              Question Number 1
+              How does CRM-MERN track customer progress?
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-              eget.
+              CRM-MERN tracks customer progress by using the different contact
+              status that are usually used in the sales pipeline such as
+              "Opportunity","Qualified","Contacting","Engaging","Success","Failure",and
+              "Closing" to indicate the stage the customer is in.
             </Typography>
           </AccordionDetails>
         </Accordion>
@@ -165,14 +171,15 @@ export default function HomePage() {
             id="panel2a-header"
           >
             <Typography sx={{ fontWeight: "bold" }}>
-              Question Number 2
+              What is shown in the CRM-MERN dashboard?
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-              eget.
+              Information on the total customers that sale group has is shown as
+              well as new members and the amount of each customer in each
+              pipeline stage.The goal of the dashboard is to show a snapshot of
+              both the salegroup and the customers.
             </Typography>
           </AccordionDetails>
         </Accordion>

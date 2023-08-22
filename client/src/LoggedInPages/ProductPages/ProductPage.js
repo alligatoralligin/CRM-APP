@@ -14,7 +14,9 @@ import {
   CardContent,
   Card,
   Paper,
+  MenuItem,
 } from "@mui/material";
+import BarChart from "../../Charts/BarChart";
 
 function ProductPage(props) {
   const { register, handleSubmit, watch, reset, getValues } = useForm();
@@ -56,13 +58,15 @@ function ProductPage(props) {
 
   // Edit product function redirects to the edit page for the product that is being edited
   function editFunc(itemID) {}
+
+  // Select Options Original
   let selectOptions = [];
   if (SaleGroupList) {
     for (const group in SaleGroupList) {
       selectOptions.push(
-        <option value={SaleGroupList[group]._id}>
+        <MenuItem value={SaleGroupList[group]._id}>
           {SaleGroupList[group].name}
-        </option>
+        </MenuItem>
       );
     }
   }
@@ -71,7 +75,7 @@ function ProductPage(props) {
   if (SaleGroupList) {
     for (const group in SaleGroupList) {
       productDisplay.push(
-        <Typography variant="subtitle1" sx={{ textAlign: "center" }}>
+        <Typography variant="h6" sx={{ textAlign: "center", mb: 2, mt: 6 }}>
           {SaleGroupList[group].name}
         </Typography>
       );
@@ -109,6 +113,39 @@ function ProductPage(props) {
       }
     }
   }
+  let productChartData;
+  if (SaleGroupList) {
+    productChartData = {
+      labels: SaleGroupList[0].Products.map((data) => data.name),
+      datasets: [
+        {
+          label: "Products Sold",
+          data: SaleGroupList[0].Products.map((data) => data.AmountSold),
+          backgroundColor: [
+            "rgba(75,192,192,1)",
+            "&quot;#ecf0f1",
+            "#50AF95",
+            "#f3ba2f",
+            "#2a71d0",
+          ],
+          borderColor: "black",
+          borderWidth: 2,
+        },
+      ],
+    };
+  }
+  // let labels = SaleGroupList.map((data) => data.Products);
+
+  let BarChartRender;
+  if (productChartData) {
+    BarChartRender = (
+      <BarChart
+        chartData={productChartData}
+        headerInfo={"Products sold"}
+        chartTitle={"Products sold"}
+      ></BarChart>
+    );
+  }
 
   return (
     <Grid
@@ -117,7 +154,7 @@ function ProductPage(props) {
       direction="column"
       alignItems="center"
       justifyContent="center"
-      sx={{ minHeight: "100vh" }}
+      sx={{ minHeight: "100vh", backgroundColor: "ghostwhite" }}
     >
       <Typography variant="h4" sx={{ marginBottom: 10 }}>
         Add Products to Your Sales Group
@@ -128,8 +165,8 @@ function ProductPage(props) {
           spacing={0}
           direction="column"
           alignItems="flex-end"
-          xs={6}
-          sx={{ minHeight: "600px" }}
+          xs={4}
+          sx={{ minHeight: "500px" }}
         >
           <Box
             component="form"
@@ -137,17 +174,17 @@ function ProductPage(props) {
               "& .MuiTextField-root": { m: 1, width: "25ch" },
               minHeight: "600px",
               minWidth: "400px",
-              border: 1,
-              borderRadius: "2%",
+
               paddingLeft: 5,
               paddingRight: 5,
               marginRight: 3,
+              backgroundColor: "white",
             }}
             noValidate
             autoComplete="off"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <Typography variant="h6" sx={{ marginTop: 10 }}>
+            <Typography variant="h6" sx={{ marginTop: 5, mb: 3 }}>
               Add New Group Products Here
             </Typography>
             <Stack spacing={2}>
@@ -169,9 +206,20 @@ function ProductPage(props) {
                 type="text"
                 {...register("Img", { required: false })}
               />
-              <select {...register("GroupName", { required: true })}>
+              {/* <select {...register("GroupName", { required: true })}>
+           
+              </select> */}
+              <TextField
+                select
+                fullWidth
+                label="Select"
+                defaultValue=""
+                inputProps={register("GroupName", {
+                  required: "Please seleect group",
+                })}
+              >
                 {selectOptions}
-              </select>
+              </TextField>
               <TextField
                 id="description"
                 label="description"
@@ -224,22 +272,43 @@ function ProductPage(props) {
         <br></br>
         <button>Submit</button>
       </form> */}
-        <Grid container xs={6}>
+        <Grid
+          container
+          xs={4}
+          spacing={0}
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+        >
           <Box
             sx={{
-              border: 1,
-              borderRadius: "2%",
               maxWidth: 500,
               paddingRight: 5,
               paddingLeft: 5,
             }}
           >
-            <Typography variant="h6" sx={{ marginTop: 10 }}>
-              View Group Products Here
-            </Typography>
-            <Paper style={{ maxHeight: 500, maxWidth: 500, overflow: "auto" }}>
+            <Paper style={{ minHeight: 600, maxWidth: 500, overflow: "auto" }}>
               {productDisplay}
             </Paper>
+          </Box>
+        </Grid>
+        <Grid container xs={4}>
+          <Box
+            sx={{
+              maxWidth: 500,
+              paddingLeft: 5,
+            }}
+          >
+            <div
+              class="chart-container"
+              style={{
+                height: "500px",
+                width: "500px",
+                backgroundColor: "white",
+              }}
+            >
+              {BarChartRender}
+            </div>
           </Box>
         </Grid>
       </Grid>

@@ -322,7 +322,7 @@ export default function EnhancedTable(props) {
   );
 
   return (
-    <Box sx={{ width: "95%" }}>
+    <Box sx={{ width: "90%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>

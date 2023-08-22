@@ -13,8 +13,9 @@ import {
   Card,
   CardContent,
   Paper,
+  MenuItem,
 } from "@mui/material";
-import AddProductComp from "./HelperComps/ProductFormComp";
+import AddProductComp from "../../HelperComps/ProductFormComp";
 
 function ClientEdit(props) {
   const [clientData, setClientData] = useState("");
@@ -82,7 +83,15 @@ function ClientEdit(props) {
     console.log(data);
   };
 
-  watch(["name", "title", "Email", "phoneNumber", "Source", "Notes"]);
+  watch([
+    "name",
+    "title",
+    "Email",
+    "phoneNumber",
+    "Source",
+    "Notes",
+    "ContactStatus",
+  ]);
 
   let productRender = [];
 
@@ -188,17 +197,30 @@ function ClientEdit(props) {
               />
               <br></br>
               <label htmlFor="ContactStatus">Contact Status</label>
-              <select {...register("ContactStatus", { required: true })}>
-                <option value="opportunity">New Opportunity</option>
-                <option value="contacting">Contacting</option>
-                <option value="engaging">Engaging</option>
-                <option value="qualified">Qualified</option>
+              <TextField
+                select
+                fullWidth
+                label="Select"
+                defaultValue={"default"}
+                sx={{ marginBottom: 2 }}
+                inputProps={register("ContactStatus", {
+                  required: "Please select contact status ",
+                })}
+              >
+                <MenuItem value="default" disabled>
+                  {clientData.ContactStatus}
+                </MenuItem>
+                <MenuItem value="opportunity">New Opportunity</MenuItem>
+                <MenuItem value="contacting">Contacting</MenuItem>
+                <MenuItem value="engaging">Engaging</MenuItem>
+                <MenuItem value="qualified">Qualified</MenuItem>
                 {/* custom stages is different for each company will try to make this step customizable later. Place holder atm */}
-                <option value="customStages">Custom stages</option>
-                <option value="closing">Closing</option>
-                <option value="Success">Success</option>
-                <option value="Failure">Failure</option>
-              </select>
+                <MenuItem value="customStages">Custom stages</MenuItem>
+                <MenuItem value="closing">Closing</MenuItem>
+                <MenuItem value="Success">Success</MenuItem>
+                <MenuItem value="Failure">Failure</MenuItem>
+              </TextField>
+
               <Button type="submit" variant="outlined" sx={{ mt: 2 }}>
                 Update
               </Button>

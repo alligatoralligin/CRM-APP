@@ -185,7 +185,7 @@ export default function MiniDrawer(props) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" open={open} sx={{ bgcolor: "navy" }}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -228,7 +228,7 @@ export default function MiniDrawer(props) {
         <List>
           {["Client Page", "Dashboard", "Create Group", "Group Page"].map(
             (text, index) => (
-              <NavLink to={navLink2[index]}>
+              <NavLink style={{ textDecoration: "none" }} to={navLink2[index]}>
                 <ListItem key={text} disablePadding sx={{ display: "block" }}>
                   <ListItemButton
                     sx={{
@@ -279,7 +279,7 @@ export default function MiniDrawer(props) {
         <Divider />
         <List>
           {["Product"].map((text, index) => (
-            <NavLink to={navLinkList[index]}>
+            <NavLink style={{ textDecoration: "none" }} to={navLinkList[index]}>
               <ListItem key={text} disablePadding sx={{ display: "block" }}>
                 <ListItemButton
                   sx={{

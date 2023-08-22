@@ -3,7 +3,12 @@ import { Grid, Typography, Box } from "@mui/material";
 
 export default function AboutPage() {
   return (
-    <Grid sx={{ height: "100vh" }}>
+    <Grid
+      sx={{
+        height: "100vh",
+        background: "linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%)",
+      }}
+    >
       <Grid
         container
         direction="column"
@@ -20,9 +25,10 @@ export default function AboutPage() {
               border: 1,
               borderRadius: "2%",
               padding: 3,
+              borderColor: "secondary.main",
             }}
           >
-            <Typography variant="p">
+            <Typography variant="h7">
               {" "}
               CRM-MERN is a Customer Relationship Management web app that allows
               companies to add,track, and manage,clients. CRM-MERN allows

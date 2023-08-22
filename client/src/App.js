@@ -2,25 +2,24 @@ import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useState } from "react";
 import "./App.css";
-import ClientEdit from "./ClientEdit";
-import ClientPage from "./ClientPage";
-import LoginPage from "./LoginPage";
-import RegisterPage from "./RegisterPage";
+import ClientEdit from "./LoggedInPages/ClientPages/ClientEdit";
+import ClientPage from "./LoggedInPages/ClientPages/ClientPage";
+import LoginPage from "./LoggedOutPages/LoginPage";
+import RegisterPage from "./LoggedOutPages/RegisterPage";
 import Navbar from "./Navbar";
-import HomePage from "./HomePage";
-import AboutPage from "./AboutPage";
-import PricingPage from "./PricingPage";
+import HomePage from "./LoggedOutPages/HomePage";
+import AboutPage from "./LoggedOutPages/AboutPage";
 import ProtectedRoute from "./ProtectedRoute";
-import Dashboard from "./Dashboard";
-import GroupCreatePage from "./GroupCreatePage";
-import GroupPage from "./GroupPage";
-import ProductPage from "./ProductPage";
-import ProductEdit from "./ProductEdit";
+import Dashboard from "./LoggedInPages/Dashboard";
+import GroupCreatePage from "./LoggedInPages/GroupPages/GroupCreatePage";
+import GroupPage from "./LoggedInPages/GroupPages/GroupPage";
+import ProductPage from "./LoggedInPages/ProductPages/ProductPage";
+import ProductEdit from "./LoggedInPages/ProductPages/ProductEdit";
 // Theme Provider
 import theme from "./Themes/Theme";
 import { ThemeProvider } from "@mui/material/styles";
 import MiniDrawer from "./DrawerComp";
-import FeaturesPage from "./FeaturesPage";
+import FeaturesPage from "./LoggedOutPages/FeaturesPage";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -146,16 +145,7 @@ function App() {
             </FeaturesPage>
           }
         ></Route>
-        <Route
-          path="/Pricing"
-          element={
-            <PricingPage
-              isLoggedIn={isLoggedIn}
-              handleLogout={handleLogout}
-              setIsLoggedIn={handleLogin}
-            ></PricingPage>
-          }
-        ></Route>
+
         {/* Protected routes */}
         <Route
           path="/Dashboard/:id"
