@@ -7,6 +7,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { palette } from "@mui/system";
 import ActionAreaCard from "../HelperComps/ActionAreaCard";
+import { NavLink } from "react-router-dom";
 
 export default function HomePage() {
   return (
@@ -35,7 +36,9 @@ export default function HomePage() {
             display: { sm: "flex", xs: "flex", md: "grid" },
           }}
         >
-          <Typography sx={{ typography: { sm: "h4", md: "h2" } }}>
+          <Typography
+            sx={{ typography: { sm: "h4", md: "h2" }, color: "white" }}
+          >
             Effortlessly tracking and building
             <br></br>
             the relationships that you want with your clients
@@ -53,9 +56,13 @@ export default function HomePage() {
                 fontSize: 20,
                 mr: 5,
                 mt: 5,
+                backgroundColor: "white",
+                border: 2,
               }}
             >
-              Register for free
+              <NavLink to="/Register" style={{ textDecoration: "none" }}>
+                Register for free
+              </NavLink>
             </Button>
             <Button
               variant="outlined"
@@ -64,9 +71,16 @@ export default function HomePage() {
                 width: 350,
                 fontSize: 20,
                 mt: 5,
+                backgroundColor: "white",
+                border: 2,
               }}
             >
-              FAQ
+              <a
+                href="#FAQ-Section"
+                style={{ textDecoration: "none", scrollBehavior: "smooth" }}
+              >
+                FAQ
+              </a>
             </Button>
           </Typography>
         </Grid>
@@ -85,7 +99,7 @@ export default function HomePage() {
         </Grid>
       </Grid>
       <Grid container direction="column" alignItems="center">
-        <Typography variant="h2" gutterBottom>
+        <Typography variant="h2" sx={{ marginBottom: 5, color: "white" }}>
           Customer Testimonies
         </Typography>
       </Grid>
@@ -128,8 +142,9 @@ export default function HomePage() {
         justifyContent="center"
         alignItems="center"
         sx={{ height: "100vh" }}
+        id="FAQ-Section"
       >
-        <Typography gutterBottom variant="h2">
+        <Typography gutterBottom variant="h2" sx={{ color: "white" }}>
           Frequently Asked Questions
         </Typography>
         <Box

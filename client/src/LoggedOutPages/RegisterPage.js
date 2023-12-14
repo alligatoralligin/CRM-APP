@@ -24,7 +24,7 @@ export default function RegisterPage(props) {
   watch(["username", "password", "Email", "salegroup"]);
 
   return (
-    <Grid container width={5 / 5}>
+    <Grid container width={5 / 5} sx={{ overflow: "hidden" }}>
       <Grid item xs={6}>
         <Box
           sx={{ height: "100%", width: "100%" }}

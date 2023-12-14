@@ -5,7 +5,6 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 const port = 8000;
-
 //Mongoose Declarations
 const Contact = require("./Schemas/Contact");
 const SaleGroup = require("./Schemas/SalesGroup");
@@ -14,9 +13,38 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("./Schemas/User");
+// Mongo-store
+const MongoStore = require("connect-mongo");
+
+//ENV Variables
+let DATABASE_URI;
+let SESSION_KEY;
+//Connecting to MongoDB
+
+mongoose.set("strictQuery", false);
+const mongoDBConnection = mongoose
+  .connect(process.env.DATABASE_URI || "mongodb://127.0.0.1:27017/CRMAPP", {
+    useNewUrlParser: true,
+  })
+  .then((m) => {
+    return m.connection.getClient();
+    console.log("open connection");
+  })
+  .catch(() => {
+    console.log("error");
+  });
+
+const store = MongoStore.create({
+  client: mongoDBConnection,
+  dbName: "CRM-Sessions",
+  stringify: false,
+  ttl: 14 * 24 * 60 * 60,
+  autoRemove: "native",
+});
+
+// use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
 
 //express-session declaration
-
 const session = require("express-session");
 
 //adding the Date Object for Document Date
@@ -35,15 +63,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set("trust proxy", 1);
 app.use(
   session({
-    secret: "keyboard cat",
+    secret: process.env.SESSION_KEY || "keyboard cat",
     proxy: true,
-    resave: true,
+    resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: false,
       maxAge: 1000 * 60 * 60 * 24 * 7,
       secure: false,
     },
+    store: store,
   })
 );
 app.use(passport.session());
@@ -63,15 +92,6 @@ async function isLoggedIn(req, res, next) {
     return next();
   }
 }
-//Connecting to MongoDB
-async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/CRMAPP");
-  console.log("connected to mongodb");
-
-  // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
-}
-
-main().catch((err) => console.log(err));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -131,6 +151,7 @@ app.post("/login", async (req, res, next) => {
     if (result == false) {
       console.log("incorrect username or password");
       console.log(err);
+      res.json({ errorMessage: "Incorrect username or password" });
     } else {
       req.session.isLoggedIn = true;
       console.log("you have logged in");

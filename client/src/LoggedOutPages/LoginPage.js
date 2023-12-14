@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Button, Grid, Typography, Box, TextField, Stack } from "@mui/material";
+import {
+  Button,
+  Grid,
+  Typography,
+  Box,
+  TextField,
+  Stack,
+  Hidden,
+  Alert,
+} from "@mui/material";
+import FlashMessage from "react-flash-message";
 
 export default function LoginPage(props) {
   const { register, handleSubmit, watch, reset } = useForm();
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState();
+
   const onSubmit = async (data) => {
     reset();
     const loginResponse = await axios.post(
@@ -19,6 +31,9 @@ export default function LoginPage(props) {
     );
     console.log(`Logged in state : ${loginResponse.data.session}`);
     console.log(loginResponse.data);
+
+    console.log(loginResponse.data.session);
+
     if (loginResponse.data.session === true) {
       props.setIsLoggedIn();
       window.localStorage.setItem("IS_LOGGED_IN", loginResponse.data.session);
@@ -31,12 +46,18 @@ export default function LoginPage(props) {
 
       navigate(`/Clientlist/${loginResponse.data.id}`);
     }
+
     console.log(data);
+    if (loginResponse.data.session === undefined) {
+      setErrorMessage(
+        <Alert severity="error">{loginResponse.data.errorMessage}</Alert>
+      );
+    }
   };
 
   watch(["Username", "Password"]);
   return (
-    <Grid container width={5 / 5}>
+    <Grid container width={5 / 5} sx={{ overflow: "hidden" }}>
       <Grid
         item
         xs={6}
@@ -50,6 +71,7 @@ export default function LoginPage(props) {
         <Typography variant="h4" gutterBottom>
           Login
         </Typography>
+
         <Box
           component="form"
           sx={{
@@ -75,6 +97,7 @@ export default function LoginPage(props) {
             <Button type="submit" variant="outlined" sx={{ mt: 2 }}>
               Login
             </Button>
+            {errorMessage}
             <Typography variant="subtitle">
               Don't have an account? {<NavLink to="/Register">Sign Up</NavLink>}
             </Typography>

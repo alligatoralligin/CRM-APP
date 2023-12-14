@@ -16,7 +16,12 @@ export default function AboutPage() {
         sx={{ height: "100vh" }}
       >
         <Box ml={15} mt={50}>
-          <Typography variant="h2" fontWeight="medium" gutterBottom>
+          <Typography
+            variant="h2"
+            fontWeight="medium"
+            gutterBottom
+            sx={{ color: "white" }}
+          >
             About CRM-MERN
           </Typography>
           <Box
@@ -26,6 +31,7 @@ export default function AboutPage() {
               borderRadius: "2%",
               padding: 3,
               borderColor: "secondary.main",
+              backgroundColor: "white",
             }}
           >
             <Typography variant="h7">

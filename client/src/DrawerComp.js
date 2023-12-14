@@ -167,17 +167,29 @@ export default function MiniDrawer(props) {
     AboutButtons = (
       <div>
         <Button variant="contained" color="primary" sx={{ mr: 10 }}>
-          <NavLink to="/Home">Homepage</NavLink>
+          <NavLink style={{ textDecoration: "none", color: "white" }} to="/">
+            Homepage
+          </NavLink>
         </Button>
         <Button variant="contained" color="primary" sx={{ mr: 10 }}>
-          <NavLink to="/About">About</NavLink>
+          <NavLink
+            style={{ textDecoration: "none", color: "white" }}
+            to="/About"
+          >
+            About
+          </NavLink>
         </Button>
 
         {/* <Button variant="contained" color="primary" sx={{ mr: 10 }}>
           <NavLink to="/Software">Software</NavLink>
         </Button> */}
         <Button variant="contained" color="primary" sx={{ mr: 10 }}>
-          <NavLink to="/Features">Features</NavLink>
+          <NavLink
+            style={{ textDecoration: "none", color: "white" }}
+            to="/Features"
+          >
+            Features
+          </NavLink>
         </Button>
       </div>
     );

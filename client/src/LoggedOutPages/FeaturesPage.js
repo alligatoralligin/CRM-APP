@@ -16,7 +16,13 @@ function FeaturesPage() {
         background: "linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%)",
       }}
     >
-      <Typography variant="h2" mt={20} gutterBottom mb={10}>
+      <Typography
+        variant="h2"
+        mt={20}
+        gutterBottom
+        mb={10}
+        sx={{ color: "white" }}
+      >
         Features
       </Typography>
 

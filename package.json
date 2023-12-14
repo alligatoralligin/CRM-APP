@@ -4,7 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "cd backend&& npm run dev",
+    "server": "cd backend&& nodemon sever.js",
+    "client": "cd client &&npm start",
+    "clientinstall": "cd client npm install",
     "dev": "concurrently \"cd backend&& npm run dev\" \"cd client &&npm start\"",
+    "render-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix cient && npm run build -- prefix client",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -17,6 +22,7 @@
     "@mui/material": "^5.14.2",
     "chart.js": "^4.3.0",
     "concurrently": "^7.6.0",
-    "react-chartjs-2": "^5.2.0"
+    "react-chartjs-2": "^5.2.0",
+    "react-flash-message": "^1.0.8"
   }
 }

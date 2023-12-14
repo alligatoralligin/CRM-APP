@@ -14,7 +14,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import GroupRemoveIcon from "@mui/icons-material/GroupRemove";
-import user128 from "C:/Users/Alex/CRM-MERN/client/src/Icons/user128.png";
+import user128 from "../../Icons/user128.png";
 
 function GroupPage(props) {
   const [GroupData, setGroupData] = useState("");

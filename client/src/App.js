@@ -85,7 +85,7 @@ function App() {
 
       <Routes>
         {/* Non protected rouites */}
-        <Route path="/Home" element={<HomePage></HomePage>}></Route>
+        <Route path="/" element={<HomePage></HomePage>}></Route>
         <Route
           path="/ClientList/:id"
           element={
